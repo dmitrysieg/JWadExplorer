@@ -18,4 +18,15 @@ public class DialogManager {
 			return null;
 		}
 	}
+	
+	public File selectSaveWadFile(Component parent, String name) {
+		final JFileChooser chooser = new JFileChooser();
+		chooser.setSelectedFile(new File(name));
+		final int returnVal = chooser.showSaveDialog(parent);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			return chooser.getSelectedFile();
+		} else {
+			return null;
+		}
+	}
 }

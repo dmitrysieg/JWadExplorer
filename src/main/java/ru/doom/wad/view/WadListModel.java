@@ -20,6 +20,10 @@ public class WadListModel implements ListModel {
 		this.wad = wad;
 		return this;
 	}
+	
+	public Wad getWad() {
+		return wad;
+	}
 
 	@Override
 	public int getSize() {

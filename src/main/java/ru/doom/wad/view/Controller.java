@@ -1,12 +1,20 @@
 package ru.doom.wad.view;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import ru.doom.wad.logic.FileController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 @Singleton
 public class Controller {
+
+	@Inject
+	private DialogManager dialogManager;
+	@Inject
+	private FileController fileController;
 
 	private int openedFilesCount;
 	private JFrame frame;
@@ -73,7 +81,7 @@ public class Controller {
 	}
 
 	public void controlWadListMenu(Component invoker, int x, int y) {
-		if (list.getSelectedIndex() > 0) {
+		if (list.getSelectedIndex() >= 0) {
 			wadListMenu.show(invoker, x, y);
 		}
 	}
@@ -84,5 +92,21 @@ public class Controller {
 
 	public void setWadListMenu(JPopupMenu wadListMenu) {
 		this.wadListMenu = wadListMenu;
+	}
+
+	public void controlSaveWadFile() {
+		try {
+			fileController.saveWadFile(
+					dialogManager.selectSaveWadFile(frame, list.getSelectedValue().toString()),
+					((WadListModel)list.getModel()).getWad().get(list.getSelectedIndex()).getContent()
+			);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(
+					frame,
+					e.getLocalizedMessage(),
+					"Error saving file",
+					JOptionPane.ERROR_MESSAGE
+			);
+		}
 	}
 }

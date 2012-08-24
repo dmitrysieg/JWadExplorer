@@ -16,7 +16,9 @@ public class ViewManager {
 	@Inject
 	private QuickSearchActionListener quickSearchActionListener;
 	@Inject
-	private WadListMenuListener wadListMenuListener;
+	private WadListMouseListener wadListMouseListener;
+	@Inject
+	private PopupMenuListener popupMenuListener;
 	@Inject
 	private Controller controller;
 
@@ -89,7 +91,7 @@ public class ViewManager {
 		JPopupMenu wadListMenu = createWadListMenu();
 		wadListMenu.setInvoker(list);
 		controller.setWadListMenu(wadListMenu);
-		list.addMouseListener(wadListMenuListener);
+		list.addMouseListener(wadListMouseListener);
 
 		return list;
 	}
@@ -98,6 +100,7 @@ public class ViewManager {
 		JPopupMenu wadListMenu = new JPopupMenu();
 
 		JMenuItem saveItem = new JMenuItem("Save file");
+		saveItem.addActionListener(popupMenuListener);
 		wadListMenu.add(saveItem);
 
 		return wadListMenu;

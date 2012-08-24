@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 @Singleton
-public class WadListMenuListener implements MouseListener {
+public class WadListMouseListener implements MouseListener {
 
 	@Inject
 	private Controller controller;
