@@ -1,11 +1,18 @@
 package ru.doom.wad.logic;
 
+import javax.swing.*;
 import java.io.*;
 
 public class IWadReader {
 
 	private static final int IWAD = 1145132873;
-	
+
+	private final JProgressBar progressBar;
+
+	public IWadReader(JProgressBar progressBar) {
+		this.progressBar = progressBar;
+	}
+
 	public Wad read(File file) throws IOException {
 
 		LERandomAccessFile reader = new LERandomAccessFile(file, "r");
@@ -13,7 +20,12 @@ public class IWadReader {
 
 		try {
 			checkSignature(reader);
+
 			final int numlumps = reader.readLEInt();
+			progressBar.setMinimum(0);
+			progressBar.setMaximum(numlumps);
+			progressBar.setValue(0);
+
 			final int diroffset = reader.readLEInt();
 			reader.seek(diroffset);
 
@@ -26,6 +38,7 @@ public class IWadReader {
 				reader.readFully(name);
 				wadEntry.setName(name);
 				wad.add(wadEntry);
+				progressBar.setValue(i+1);
 			}
 
 			// read files
@@ -35,7 +48,6 @@ public class IWadReader {
 				final byte[] content = new byte[wadEntry.getSize()];
 				reader.readFully(content);
 				wadEntry.setContent(content);
-				System.out.println(new String(wadEntry.getName()));
 			}
 		} catch (IWadParseException e) {
 			e.printStackTrace();

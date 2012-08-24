@@ -3,6 +3,7 @@ package ru.doom.wad.logic.task;
 import ru.doom.wad.logic.IWadReader;
 import ru.doom.wad.logic.Wad;
 import ru.doom.wad.view.Controller;
+import ru.doom.wad.view.WadListModel;
 
 import javax.swing.*;
 import java.io.File;
@@ -20,8 +21,8 @@ public class OpenWadTask implements Runnable {
 	@Override
 	public void run() {
 		try {
-			Wad wad = new IWadReader().read(file);
-
+			Wad wad = new IWadReader(controller.getProgressBar()).read(file);
+			controller.getList().setModel(new WadListModel(wad));
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(
 					controller.getFrame(),

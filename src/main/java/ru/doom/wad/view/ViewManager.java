@@ -12,6 +12,8 @@ public class ViewManager {
 
 	@Inject
 	private MainMenuActionListener mainMenuActionListener;
+	@Inject
+	private Controller controller;
 
 	public JFrame createMainFrame() {
 		JFrame mainFrame = new JFrame();
@@ -21,7 +23,12 @@ public class ViewManager {
 		mainFrame.setJMenuBar(createMainMenu());
 
 		mainFrame.setLayout(new BorderLayout());
-		mainFrame.getContentPane().add(createProgressBar(), BorderLayout.SOUTH);
+
+		controller.setProgressBar(createProgressBar());
+		mainFrame.getContentPane().add(controller.getProgressBar(), BorderLayout.SOUTH);
+
+		controller.setList(createList());
+		mainFrame.getContentPane().add(controller.getList(), BorderLayout.EAST);
 
 		mainFrame.setVisible(true);
 		return mainFrame;
@@ -52,5 +59,11 @@ public class ViewManager {
 		JProgressBar progressBar = new JProgressBar(JProgressBar.HORIZONTAL);
 		progressBar.setPreferredSize(new Dimension(0, 16));
 		return progressBar;
+	}
+
+	public JList createList() {
+		JList list = new JList();
+		list.setPreferredSize(new Dimension(100, 0));
+		return list;
 	}
 }
