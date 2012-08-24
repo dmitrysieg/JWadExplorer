@@ -73,7 +73,6 @@ public class Controller {
 	}
 
 	public void controlWadListMenu(Component invoker, int x, int y) {
-		System.out.println("RIGHT");
 		if (list.getSelectedIndex() > 0) {
 			wadListMenu.show(invoker, x, y);
 		}
