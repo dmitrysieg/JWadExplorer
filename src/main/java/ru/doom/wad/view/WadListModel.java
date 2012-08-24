@@ -2,7 +2,7 @@ package ru.doom.wad.view;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import ru.doom.wad.logic.Utils;
+import ru.doom.wad.logic.WadUtils;
 import ru.doom.wad.logic.Wad;
 
 import javax.swing.*;
@@ -12,7 +12,7 @@ import javax.swing.event.ListDataListener;
 public class WadListModel implements ListModel {
 
 	@Inject
-	private Utils utils;
+	private WadUtils wadUtils;
 
 	private Wad wad;
 
@@ -34,7 +34,7 @@ public class WadListModel implements ListModel {
 	@Override
 	public Object getElementAt(int index) {
 		checkWad();
-		return utils.trimNull(new String(wad.get(index).getName()));
+		return wadUtils.trimNull(new String(wad.get(index).getName()));
 	}
 
 	@Override

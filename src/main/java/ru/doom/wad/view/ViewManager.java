@@ -2,6 +2,7 @@ package ru.doom.wad.view;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import ru.doom.wad.view.widget.PalettePanel;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -31,8 +32,12 @@ public class ViewManager {
 
 		mainFrame.setLayout(new BorderLayout());
 
+		/* SOUTH */
+
 		controller.setProgressBar(createProgressBar());
 		mainFrame.getContentPane().add(controller.getProgressBar(), BorderLayout.SOUTH);
+
+		/* WEST */
 
 		JPanel westPanel = new JPanel();
 		westPanel.setLayout(new BoxLayout(westPanel, BoxLayout.Y_AXIS));
@@ -51,6 +56,19 @@ public class ViewManager {
 		westPanel.add(listPane);
 
 		mainFrame.getContentPane().add(westPanel, BorderLayout.WEST);
+
+		/* EAST */
+
+		JPanel eastPanel = new JPanel();
+		eastPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		eastPanel.setLayout(new BoxLayout(eastPanel, BoxLayout.Y_AXIS));
+
+		PalettePanel palettePanel = new PalettePanel();
+		palettePanel.setPreferredSize(new Dimension(200, 0));
+		controller.setPalettePanel(palettePanel);
+		eastPanel.add(palettePanel);
+
+		mainFrame.getContentPane().add(eastPanel, BorderLayout.EAST);
 
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		mainFrame.setVisible(true);

@@ -3,10 +3,10 @@ package ru.doom.wad.logic;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class UtilsTest {
+public class WadUtilsTest {
 
 	@Test
 	public void testTrimNull() throws Exception {
-		Assert.assertEquals("F_END", new Utils().trimNull("F_END\u0000\u0000\u0000"));
+		Assert.assertEquals("F_END", new WadUtils().trimNull("F_END\u0000\u0000\u0000"));
 	}
 }

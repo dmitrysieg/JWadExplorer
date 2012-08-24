@@ -3,6 +3,7 @@ package ru.doom.wad.view;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import ru.doom.wad.logic.FileController;
+import ru.doom.wad.view.widget.PalettePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +24,7 @@ public class Controller {
 	private JComponent listPane;
 	private JTextField quickSearch;
 	private JPopupMenu wadListMenu;
+	private PalettePanel palettePanel;
 
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
@@ -108,5 +110,13 @@ public class Controller {
 					JOptionPane.ERROR_MESSAGE
 			);
 		}
+	}
+
+	public PalettePanel getPalettePanel() {
+		return palettePanel;
+	}
+
+	public void setPalettePanel(PalettePanel palettePanel) {
+		this.palettePanel = palettePanel;
 	}
 }
