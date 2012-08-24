@@ -23,7 +23,11 @@ public class WadCellRenderer extends DefaultListCellRenderer {
 			boolean cellHasFocus
 	) {
 		super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-		setBackground(wad.get(index).getSize() == 0 ? Color.YELLOW : Color.WHITE);
+		if (isSelected) {
+			setBackground(Color.GRAY);
+		} else {
+			setBackground(wad.get(index).getSize() == 0 ? Color.YELLOW : Color.WHITE);
+		}
 		return this;
 	}
 }

@@ -14,6 +14,8 @@ public class ViewManager {
 	@Inject
 	private MainMenuActionListener mainMenuActionListener;
 	@Inject
+	private QuickSearchActionListener quickSearchActionListener;
+	@Inject
 	private Controller controller;
 
 	public JFrame createMainFrame() {
@@ -28,12 +30,23 @@ public class ViewManager {
 		controller.setProgressBar(createProgressBar());
 		mainFrame.getContentPane().add(controller.getProgressBar(), BorderLayout.SOUTH);
 
+		JPanel westPanel = new JPanel();
+		westPanel.setLayout(new BoxLayout(westPanel, BoxLayout.Y_AXIS));
+
+		JTextField quickSearch = new JTextField();
+		quickSearch.setMaximumSize(new Dimension(Integer.MAX_VALUE, 16));
+		quickSearch.addKeyListener(quickSearchActionListener);
+		controller.setQuickSearch(quickSearch);
+		westPanel.add(quickSearch);
+
 		controller.setList(createList());
 		JScrollPane listPane = new JScrollPane(controller.getList());
 		listPane.setPreferredSize(new Dimension(200, 0));
 		listPane.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		controller.setListPane(listPane);
-		mainFrame.getContentPane().add(listPane, BorderLayout.WEST);
+		westPanel.add(listPane);
+
+		mainFrame.getContentPane().add(westPanel, BorderLayout.WEST);
 
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		mainFrame.setVisible(true);
@@ -69,6 +82,7 @@ public class ViewManager {
 
 	public JList createList() {
 		JList list = new JList();
+		list.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 		return list;
 	}
 }

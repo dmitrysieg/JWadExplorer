@@ -3,6 +3,7 @@ package ru.doom.wad.view;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import ru.doom.wad.logic.task.OpenWadTask;
+import ru.doom.wad.logic.task.TaskProvider;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -16,6 +17,8 @@ public class MainMenuActionListener implements ActionListener {
 	private DialogManager dialogManager;
 	@Inject
 	private Controller controller;
+	@Inject
+	private TaskProvider taskProvider;
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -25,7 +28,7 @@ public class MainMenuActionListener implements ActionListener {
 			JFrame frame = (JFrame)((JComponent)popupMenu.getInvoker()).getTopLevelAncestor();
 			if ("Open".equals(e.getActionCommand())) {
 				final File file = dialogManager.selectOpenFile(frame);
-				new Thread(new OpenWadTask(controller, file)).start();
+				new Thread(taskProvider.get().withFile(file)).start();
 			}
 		}		
 	}

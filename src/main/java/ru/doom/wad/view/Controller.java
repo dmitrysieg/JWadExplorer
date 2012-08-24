@@ -12,6 +12,7 @@ public class Controller {
 	private JProgressBar progressBar;
 	private JList list;
 	private JComponent listPane;
+	private JTextField quickSearch;
 
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
@@ -48,5 +49,24 @@ public class Controller {
 
 	public void setListPane(JComponent listPane) {
 		this.listPane = listPane;
+	}
+
+	public JTextField getQuickSearch() {
+		return quickSearch;
+	}
+
+	public void setQuickSearch(JTextField quickSearch) {
+		this.quickSearch = quickSearch;
+	}
+
+	public void processQuickSearch() {
+		String prefix = quickSearch.getText();
+		for (int i = 0; i < list.getModel().getSize(); i++) {
+			if (((String)list.getModel().getElementAt(i)).startsWith(prefix)) {
+				list.setSelectedIndex(i);
+				list.ensureIndexIsVisible(i);
+				break;
+			}
+		}
 	}
 }
