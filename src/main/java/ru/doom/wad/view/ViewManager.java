@@ -1,26 +1,40 @@
 package ru.doom.wad.view;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
+@Singleton
 public class ViewManager {
 
-	public static void createMainFrame() {
+	@Inject
+	private MainMenuActionListener mainMenuActionListener;
+
+	public JFrame createMainFrame() {
 		JFrame mainFrame = new JFrame();
 		mainFrame.setTitle("WAD Explorer v.1.0");
 		mainFrame.setSize(400, 300);
+
 		mainFrame.setJMenuBar(createMainMenu());
+
+		mainFrame.setLayout(new BorderLayout());
+		mainFrame.getContentPane().add(createProgressBar(), BorderLayout.SOUTH);
+
 		mainFrame.setVisible(true);
+		return mainFrame;
 	}
 
-	public static JMenuBar createMainMenu() {
+	public JMenuBar createMainMenu() {
 		JMenuBar menuBar = new JMenuBar();
 
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 
 		JMenuItem openItem = new JMenuItem("Open", KeyEvent.VK_O);
-		openItem.addActionListener(new MainMenuActionListener());
+		openItem.addActionListener(mainMenuActionListener);
 		fileMenu.add(openItem);
 		JMenuItem saveItem = new JMenuItem("Save", KeyEvent.VK_S);
 		fileMenu.add(saveItem);
@@ -32,5 +46,11 @@ public class ViewManager {
 		menuBar.add(helpMenu);
 
 		return menuBar;
+	}
+
+	public JProgressBar createProgressBar() {
+		JProgressBar progressBar = new JProgressBar(JProgressBar.HORIZONTAL);
+		progressBar.setPreferredSize(new Dimension(0, 16));
+		return progressBar;
 	}
 }
