@@ -3,6 +3,9 @@ package ru.doom.wad.view;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import ru.doom.wad.logic.FileController;
+import ru.doom.wad.logic.graphics.DoomGraphicsConverter;
+import ru.doom.wad.view.widget.ImagePanel;
+import ru.doom.wad.view.widget.Palette;
 import ru.doom.wad.view.widget.PalettePanel;
 
 import javax.swing.*;
@@ -16,6 +19,8 @@ public class Controller {
 	private DialogManager dialogManager;
 	@Inject
 	private FileController fileController;
+	@Inject
+	private DoomGraphicsConverter doomGraphicsConverter;
 
 	private int openedFilesCount;
 	private JFrame frame;
@@ -25,6 +30,7 @@ public class Controller {
 	private JTextField quickSearch;
 	private JPopupMenu wadListMenu;
 	private PalettePanel palettePanel;
+	private ImagePanel imagePanel;
 
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
@@ -118,5 +124,24 @@ public class Controller {
 
 	public void setPalettePanel(PalettePanel palettePanel) {
 		this.palettePanel = palettePanel;
+	}
+
+	public void showCurrentResource() {
+		if (list.getSelectedIndex() >= 0) {
+			final Palette palette = palettePanel.getPalette();
+			if (palette != null) {
+				final byte[] imageFile = ((WadListModel)list.getModel()).getWad().get(list.getSelectedIndex()).getContent();
+				imagePanel.setImage(doomGraphicsConverter.convertSprite(imageFile, palette));
+				imagePanel.repaint();
+			}
+		}
+	}
+
+	public ImagePanel getImagePanel() {
+		return imagePanel;
+	}
+
+	public void setImagePanel(ImagePanel imagePanel) {
+		this.imagePanel = imagePanel;
 	}
 }

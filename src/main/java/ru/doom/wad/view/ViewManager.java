@@ -2,6 +2,7 @@ package ru.doom.wad.view;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import ru.doom.wad.view.widget.ImagePanel;
 import ru.doom.wad.view.widget.PalettePanel;
 
 import javax.swing.*;
@@ -69,6 +70,16 @@ public class ViewManager {
 		eastPanel.add(palettePanel);
 
 		mainFrame.getContentPane().add(eastPanel, BorderLayout.EAST);
+
+		/* CENTER */
+
+		JPanel centerPanel = new JPanel();
+		ImagePanel imagePanel = new ImagePanel();
+		imagePanel.setPreferredSize(new Dimension(200, 200));
+		controller.setImagePanel(imagePanel);
+		centerPanel.add(imagePanel);
+
+		mainFrame.getContentPane().add(centerPanel, BorderLayout.CENTER);
 
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		mainFrame.setVisible(true);

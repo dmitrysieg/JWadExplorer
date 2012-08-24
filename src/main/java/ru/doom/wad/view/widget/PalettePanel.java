@@ -13,6 +13,10 @@ public class PalettePanel extends JPanel {
 		this.palette = palette;
 	}
 
+	public Palette getPalette() {
+		return palette;
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);

@@ -16,6 +16,8 @@ public class WadListMouseListener implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON3) {
 			controller.controlWadListMenu(e.getComponent(), e.getX(), e.getY());
+		} else if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+			controller.showCurrentResource();
 		}
 	}
 
