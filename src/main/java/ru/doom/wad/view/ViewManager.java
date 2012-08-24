@@ -14,13 +14,7 @@ import java.awt.event.KeyEvent;
 public class ViewManager {
 
 	@Inject
-	private MainMenuActionListener mainMenuActionListener;
-	@Inject
-	private QuickSearchActionListener quickSearchActionListener;
-	@Inject
-	private WadListMouseListener wadListMouseListener;
-	@Inject
-	private PopupMenuListener popupMenuListener;
+	private Listeners listeners;
 	@Inject
 	private Controller controller;
 
@@ -45,7 +39,7 @@ public class ViewManager {
 
 		JTextField quickSearch = new JTextField();
 		quickSearch.setMaximumSize(new Dimension(Integer.MAX_VALUE, 16));
-		quickSearch.addKeyListener(quickSearchActionListener);
+		quickSearch.addKeyListener(listeners.getQuickSearchActionListener());
 		controller.setQuickSearch(quickSearch);
 		westPanel.add(quickSearch);
 
@@ -93,7 +87,7 @@ public class ViewManager {
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 
 		JMenuItem openItem = new JMenuItem("Open", KeyEvent.VK_O);
-		openItem.addActionListener(mainMenuActionListener);
+		openItem.addActionListener(listeners.getMainMenuActionListener());
 		fileMenu.add(openItem);
 		JMenuItem saveItem = new JMenuItem("Save", KeyEvent.VK_S);
 		fileMenu.add(saveItem);
@@ -120,7 +114,7 @@ public class ViewManager {
 		JPopupMenu wadListMenu = createWadListMenu();
 		wadListMenu.setInvoker(list);
 		controller.setWadListMenu(wadListMenu);
-		list.addMouseListener(wadListMouseListener);
+		list.addMouseListener(listeners.getWadListMouseListener());
 
 		return list;
 	}
@@ -129,7 +123,7 @@ public class ViewManager {
 		JPopupMenu wadListMenu = new JPopupMenu();
 
 		JMenuItem saveItem = new JMenuItem("Save file");
-		saveItem.addActionListener(popupMenuListener);
+		saveItem.addActionListener(listeners.getPopupMenuListener());
 		wadListMenu.add(saveItem);
 
 		return wadListMenu;
