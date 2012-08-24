@@ -33,24 +33,23 @@ public class OpenWadTask implements Runnable {
 
 	@Override
 	public void run() {
-		if (file == null) {
-			throw new IllegalStateException("no file specified");
-		}
-		try {
-			Wad wad = new IWadReader(controller.getProgressBar()).read(file);
-			Palette palette = paletteReader.readPalette(wadUtils.findByName(wad, "PLAYPAL").getContent(), 0);
-			controller.getPalettePanel().setPalette(palette);
-			controller.getPalettePanel().repaint();
-			controller.getList().setCellRenderer(new WadCellRenderer().wad(wad));
-			controller.getList().setModel(wadListModel.withWad(wad));
-			controller.getListPane().doLayout();
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(
-					controller.getFrame(),
-					e.getLocalizedMessage(),
-					"Error opening WAD file",
-					JOptionPane.ERROR_MESSAGE
-			);
+		if (file != null) {
+			try {
+				Wad wad = new IWadReader(controller.getProgressBar()).read(file);
+				Palette palette = paletteReader.readPalette(wadUtils.findByName(wad, "PLAYPAL").getContent(), 0);
+				controller.getPalettePanel().setPalette(palette);
+				controller.getPalettePanel().repaint();
+				controller.getList().setCellRenderer(new WadCellRenderer().wad(wad));
+				controller.getList().setModel(wadListModel.withWad(wad));
+				controller.getListPane().doLayout();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(
+						controller.getFrame(),
+						e.getLocalizedMessage(),
+						"Error opening WAD file",
+						JOptionPane.ERROR_MESSAGE
+				);
+			}
 		}
 	}
 }
