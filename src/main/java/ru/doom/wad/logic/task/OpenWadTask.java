@@ -23,6 +23,7 @@ public class OpenWadTask implements Runnable {
 		try {
 			Wad wad = new IWadReader(controller.getProgressBar()).read(file);
 			controller.getList().setModel(new WadListModel(wad));
+			controller.getListPane().doLayout();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(
 					controller.getFrame(),

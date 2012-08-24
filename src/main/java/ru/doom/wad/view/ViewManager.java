@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -28,8 +29,13 @@ public class ViewManager {
 		mainFrame.getContentPane().add(controller.getProgressBar(), BorderLayout.SOUTH);
 
 		controller.setList(createList());
-		mainFrame.getContentPane().add(controller.getList(), BorderLayout.EAST);
+		JScrollPane listPane = new JScrollPane(controller.getList());
+		listPane.setPreferredSize(new Dimension(200, 0));
+		listPane.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		controller.setListPane(listPane);
+		mainFrame.getContentPane().add(listPane, BorderLayout.WEST);
 
+		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		mainFrame.setVisible(true);
 		return mainFrame;
 	}
@@ -63,7 +69,6 @@ public class ViewManager {
 
 	public JList createList() {
 		JList list = new JList();
-		list.setPreferredSize(new Dimension(100, 0));
 		return list;
 	}
 }

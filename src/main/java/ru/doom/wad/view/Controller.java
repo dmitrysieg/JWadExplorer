@@ -11,6 +11,7 @@ public class Controller {
 	private JFrame frame;
 	private JProgressBar progressBar;
 	private JList list;
+	private JComponent listPane;
 
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
@@ -39,5 +40,13 @@ public class Controller {
 	public void handleOpenedWad() {
 		if (openedFilesCount == 0) {
 		}
+	}
+
+	public JComponent getListPane() {
+		return listPane;
+	}
+
+	public void setListPane(JComponent listPane) {
+		this.listPane = listPane;
 	}
 }
