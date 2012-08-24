@@ -3,6 +3,7 @@ package ru.doom.wad.view;
 import com.google.inject.Singleton;
 
 import javax.swing.*;
+import java.awt.*;
 
 @Singleton
 public class Controller {
@@ -13,6 +14,7 @@ public class Controller {
 	private JList list;
 	private JComponent listPane;
 	private JTextField quickSearch;
+	private JPopupMenu wadListMenu;
 
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
@@ -68,5 +70,20 @@ public class Controller {
 				break;
 			}
 		}
+	}
+
+	public void controlWadListMenu(Component invoker, int x, int y) {
+		System.out.println("RIGHT");
+		if (list.getSelectedIndex() > 0) {
+			wadListMenu.show(invoker, x, y);
+		}
+	}
+
+	public JPopupMenu getWadListMenu() {
+		return wadListMenu;
+	}
+
+	public void setWadListMenu(JPopupMenu wadListMenu) {
+		this.wadListMenu = wadListMenu;
 	}
 }

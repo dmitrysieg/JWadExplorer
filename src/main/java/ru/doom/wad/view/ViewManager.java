@@ -16,6 +16,8 @@ public class ViewManager {
 	@Inject
 	private QuickSearchActionListener quickSearchActionListener;
 	@Inject
+	private WadListMenuListener wadListMenuListener;
+	@Inject
 	private Controller controller;
 
 	public JFrame createMainFrame() {
@@ -83,6 +85,21 @@ public class ViewManager {
 	public JList createList() {
 		JList list = new JList();
 		list.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
+
+		JPopupMenu wadListMenu = createWadListMenu();
+		wadListMenu.setInvoker(list);
+		controller.setWadListMenu(wadListMenu);
+		list.addMouseListener(wadListMenuListener);
+
 		return list;
+	}
+
+	public JPopupMenu createWadListMenu() {
+		JPopupMenu wadListMenu = new JPopupMenu();
+
+		JMenuItem saveItem = new JMenuItem("Save file");
+		wadListMenu.add(saveItem);
+
+		return wadListMenu;
 	}
 }

@@ -13,45 +13,40 @@ public class IWadReader {
 		this.progressBar = progressBar;
 	}
 
-	public Wad read(File file) throws IOException {
+	public Wad read(File file) throws IOException, IWadParseException {
 
 		LERandomAccessFile reader = new LERandomAccessFile(file, "r");
 		final Wad wad = new Wad();
 
-		try {
-			checkSignature(reader);
+		checkSignature(reader);
 
-			final int numlumps = reader.readLEInt();
-			progressBar.setMinimum(0);
-			progressBar.setMaximum(numlumps);
-			progressBar.setValue(0);
+		final int numlumps = reader.readLEInt();
+		progressBar.setMinimum(0);
+		progressBar.setMaximum(numlumps);
+		progressBar.setValue(0);
 
-			final int diroffset = reader.readLEInt();
-			reader.seek(diroffset);
+		final int diroffset = reader.readLEInt();
+		reader.seek(diroffset);
 
-			// read directory
-			for (int i = 0; i < numlumps; i++) {
-				WadEntry wadEntry = new WadEntry();
-				wadEntry.setOffset(reader.readLEInt());
-				wadEntry.setSize(reader.readLEInt());
-				final byte[] name = new byte[8];
-				reader.readFully(name);
-				wadEntry.setName(name);
-				wad.add(wadEntry);
-				progressBar.setValue(i+1);
-			}
+		// read directory
+		for (int i = 0; i < numlumps; i++) {
+			WadEntry wadEntry = new WadEntry();
+			wadEntry.setOffset(reader.readLEInt());
+			wadEntry.setSize(reader.readLEInt());
+			final byte[] name = new byte[8];
+			reader.readFully(name);
+			wadEntry.setName(name);
+			wad.add(wadEntry);
+			progressBar.setValue(i+1);
+		}
 
-			// read files
-			for (int i = 0; i < numlumps; i++) {
-				final WadEntry wadEntry = wad.get(i);
-				reader.seek(wadEntry.getOffset());
-				final byte[] content = new byte[wadEntry.getSize()];
-				reader.readFully(content);
-				wadEntry.setContent(content);
-			}
-		} catch (IWadParseException e) {
-			e.printStackTrace();
-			return null;
+		// read files
+		for (int i = 0; i < numlumps; i++) {
+			final WadEntry wadEntry = wad.get(i);
+			reader.seek(wadEntry.getOffset());
+			final byte[] content = new byte[wadEntry.getSize()];
+			reader.readFully(content);
+			wadEntry.setContent(content);
 		}
 
 		reader.close();
