@@ -11,6 +11,7 @@ import ru.doom.wad.view.widget.ImagePanel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.ColorModel;
+import java.awt.image.RenderedImage;
 import java.io.IOException;
 
 @Singleton
@@ -21,7 +22,7 @@ public class Controller {
 
 	private boolean isAllowedSaveImage;
 	private Wad currentWad;
-	private Image currentImage;
+	private RenderedImage currentImage;
 
 	@Inject
 	private View view;
@@ -89,7 +90,7 @@ public class Controller {
 				try {
 					final ImagePanel imagePanel = view.getImagePanel();
 					currentImage = doomGraphicsConverter.convertSprite(imageFile, view.getPalette());
-					imagePanel.setImage(currentImage);
+					imagePanel.setImage((Image)currentImage);
 					imagePanel.repaint();
 					showStatus("");
 					allowSaveImage(true);
@@ -128,5 +129,16 @@ public class Controller {
 
 	public void setCurrentWad(Wad currentWad) {
 		this.currentWad = currentWad;
+	}
+
+	public void saveCurrentImage() {
+		try {
+			fileController.saveImageFile(
+					dialogManager.selectSaveWadFile(view.getList().getSelectedValue().toString()),
+					currentImage
+			);
+		} catch (Exception e) {
+			dialogManager.showErrorMessageDialog("Error saving file", e.getLocalizedMessage());
+		}
 	}
 }

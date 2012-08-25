@@ -2,13 +2,12 @@ package ru.doom.wad.logic.graphics;
 
 import com.google.inject.Singleton;
 
-import java.awt.Image;
 import java.awt.image.*;
 
 @Singleton
 public class DoomGraphicsConverter {
 
-	public Image convertSprite(byte[] imageFile, ColorModel palette) throws GraphicsParsingException {
+	public RenderedImage convertSprite(byte[] imageFile, ColorModel palette) throws GraphicsParsingException {
 
 		final ContentParser parser = new ContentParser(imageFile);
 
