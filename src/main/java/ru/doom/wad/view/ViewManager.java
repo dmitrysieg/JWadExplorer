@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.net.URL;
 
 @Singleton
 public class ViewManager {
@@ -27,6 +28,11 @@ public class ViewManager {
 		mainFrame.setJMenuBar(createMainMenu());
 
 		mainFrame.setLayout(new BorderLayout());
+
+		/* NORTH */
+
+		final JToolBar toolBar = createToolBar();
+		mainFrame.getContentPane().add(toolBar, BorderLayout.NORTH);
 
 		/* SOUTH */
 
@@ -145,5 +151,22 @@ public class ViewManager {
 		wadListMenu.add(saveItem);
 
 		return wadListMenu;
+	}
+
+	private JToolBar createToolBar() {
+		final JToolBar toolBar = new JToolBar(SwingConstants.HORIZONTAL);
+
+		final URL urlSave = this.getClass().getResource("icon-save.png");
+		final Icon iconSave = new ImageIcon(urlSave, "Save image");
+		final JButton btnSave = new JButton(iconSave);
+		btnSave.setBorder(BorderFactory.createEmptyBorder());
+		btnSave.setActionCommand("Save image");
+		btnSave.addActionListener(listeners.getToolbarActionListener());
+		btnSave.setToolTipText("Save image");
+		btnSave.setEnabled(false);
+		view.setSaveImageButton(btnSave);
+
+		toolBar.add(btnSave);
+		return toolBar;
 	}
 }

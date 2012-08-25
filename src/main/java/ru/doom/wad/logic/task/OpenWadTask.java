@@ -6,8 +6,6 @@ import ru.doom.wad.logic.Wad;
 import ru.doom.wad.logic.WadUtils;
 import ru.doom.wad.view.Controller;
 import ru.doom.wad.view.View;
-import ru.doom.wad.view.WadCellRenderer;
-import ru.doom.wad.view.WadListModel;
 import ru.doom.wad.view.palette.PaletteReader;
 import ru.doom.wad.view.widget.Palette;
 
@@ -19,8 +17,6 @@ public class OpenWadTask implements Runnable {
 	private Controller controller;
 	@Inject
 	private View view;
-	@Inject
-	private WadListModel wadListModel;
 	@Inject
 	private PaletteReader paletteReader;
 	@Inject
@@ -39,12 +35,9 @@ public class OpenWadTask implements Runnable {
 			try {
 				controller.showProgress();
 				Wad wad = new IWadReader(view.getProgressBar()).read(file);
-				Palette palette = paletteReader.readPalette(wadUtils.findByName(wad, "PLAYPAL").getContent(), 0);
-				view.getPalettePanel().setPalette(palette);
-				view.getPalettePanel().repaint();
-				view.getList().setCellRenderer(new WadCellRenderer().wad(wad));
-				view.getList().setModel(wadListModel.withWad(wad));
-				view.getListPane().doLayout();
+				controller.setCurrentWad(wad);
+				final Palette palette = paletteReader.readPalette(wadUtils.findByName(wad, "PLAYPAL").getContent(), 0);
+				controller.processOnLoadWad(palette);
 			} catch (Exception e) {
 				controller.showError("Error opening WAD file", e.getLocalizedMessage());
 			}

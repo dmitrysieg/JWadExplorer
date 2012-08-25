@@ -14,6 +14,8 @@ public class Listeners {
 	private WadListMouseListener wadListMouseListener;
 	@Inject
 	private PopupMenuListener popupMenuListener;
+	@Inject
+	private ToolbarActionListener toolbarActionListener;
 
 	public MainMenuActionListener getMainMenuActionListener() {
 		return mainMenuActionListener;
@@ -29,5 +31,9 @@ public class Listeners {
 
 	public PopupMenuListener getPopupMenuListener() {
 		return popupMenuListener;
+	}
+
+	public ToolbarActionListener getToolbarActionListener() {
+		return toolbarActionListener;
 	}
 }

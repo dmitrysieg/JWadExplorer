@@ -19,6 +19,7 @@ public class View {
 	private JPopupMenu wadListMenu;
 	private PalettePanel palettePanel;
 	private ImagePanel imagePanel;
+	private JButton saveImageButton;
 
 	public JFrame getFrame() {
 		return frame;
@@ -98,5 +99,13 @@ public class View {
 
 	public void setImagePanel(ImagePanel imagePanel) {
 		this.imagePanel = imagePanel;
+	}
+
+	public JButton getSaveImageButton() {
+		return saveImageButton;
+	}
+
+	public void setSaveImageButton(JButton saveImageButton) {
+		this.saveImageButton = saveImageButton;
 	}
 }

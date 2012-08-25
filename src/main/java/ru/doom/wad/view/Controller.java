@@ -3,6 +3,7 @@ package ru.doom.wad.view;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import ru.doom.wad.logic.FileController;
+import ru.doom.wad.logic.Wad;
 import ru.doom.wad.logic.graphics.DoomGraphicsConverter;
 import ru.doom.wad.logic.graphics.GraphicsParsingException;
 import ru.doom.wad.view.widget.ImagePanel;
@@ -18,14 +19,27 @@ public class Controller {
 	public static final String SOUTH_PROGRESS = "PROGRESS";
 	public static final String SOUTH_STATUS = "STATUS";
 
+	private boolean isAllowedSaveImage;
+	private Wad currentWad;
+	private Image currentImage;
+
 	@Inject
 	private View view;
 	@Inject
 	private DialogManager dialogManager;
 	@Inject
+	private WadListModel wadListModel;
+	@Inject
 	private FileController fileController;
 	@Inject
 	private DoomGraphicsConverter doomGraphicsConverter;
+
+	@Inject
+	public Controller() {
+		isAllowedSaveImage = false;
+		currentWad = null;
+		currentImage = null;
+	}
 
 	public void processQuickSearch() {
 		String prefix = view.getQuickSearch().getText();
@@ -39,6 +53,14 @@ public class Controller {
 		}
 	}
 
+	public void processOnLoadWad(Palette palette) {
+		view.getPalettePanel().setPalette(palette);
+		view.getPalettePanel().repaint();
+		view.getList().setCellRenderer(new WadCellRenderer().wad(currentWad));
+		view.getList().setModel(wadListModel.withWad(currentWad));
+		view.getListPane().doLayout();
+	}
+
 	public void controlWadListMenu(Component invoker, int x, int y) {
 		if (view.getList().getSelectedIndex() >= 0) {
 			view.getWadListMenu().show(invoker, x, y);
@@ -50,7 +72,7 @@ public class Controller {
 		try {
 			fileController.saveWadFile(
 					dialogManager.selectSaveWadFile(list.getSelectedValue().toString()),
-					((WadListModel)list.getModel()).getWad().get(list.getSelectedIndex()).getContent()
+					currentWad.get(list.getSelectedIndex()).getContent()
 			);
 		} catch (IOException e) {
 			dialogManager.showErrorMessageDialog("Error saving file", e.getLocalizedMessage());
@@ -62,14 +84,18 @@ public class Controller {
 		if (list.getSelectedIndex() >= 0) {
 			final Palette palette = view.getPalettePanel().getPalette();
 			if (palette != null) {
-				final byte[] imageFile = ((WadListModel)list.getModel()).getWad().get(list.getSelectedIndex()).getContent();
+				final byte[] imageFile = currentWad.get(list.getSelectedIndex()).getContent();
 				try {
 					final ImagePanel imagePanel = view.getImagePanel();
-					imagePanel.setImage(doomGraphicsConverter.convertSprite(imageFile, palette));
+					currentImage = doomGraphicsConverter.convertSprite(imageFile, palette);
+					imagePanel.setImage(currentImage);
 					imagePanel.repaint();
 					showStatus("");
+					allowSaveImage(true);
 				} catch (GraphicsParsingException e) {
+					currentImage = null;
 					showStatus("Not a graphics file");
+					allowSaveImage(false);
 				}
 			}
 		}
@@ -88,5 +114,18 @@ public class Controller {
 
 	public void showError(String header, String message) {
 		dialogManager.showErrorMessageDialog(header, message);
+	}
+
+	public void allowSaveImage(boolean allowed) {
+		isAllowedSaveImage = allowed;
+		view.getSaveImageButton().setEnabled(allowed);
+	}
+
+	public boolean isAllowedSaveImage() {
+		return isAllowedSaveImage;
+	}
+
+	public void setCurrentWad(Wad currentWad) {
+		this.currentWad = currentWad;
 	}
 }
