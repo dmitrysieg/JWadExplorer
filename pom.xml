@@ -6,7 +6,7 @@
 
     <groupId>JWadExplorer</groupId>
     <artifactId>JWadExplorer</artifactId>
-    <version>1.0.0-snapshot</version>
+    <version>1.0.1</version>
 
     <dependencies>
 		<dependency>
