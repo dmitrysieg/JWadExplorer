@@ -7,10 +7,10 @@ import ru.doom.wad.logic.Wad;
 import ru.doom.wad.logic.graphics.DoomGraphicsConverter;
 import ru.doom.wad.logic.graphics.GraphicsParsingException;
 import ru.doom.wad.view.widget.ImagePanel;
-import ru.doom.wad.view.widget.Palette;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.ColorModel;
 import java.io.IOException;
 
 @Singleton
@@ -53,7 +53,8 @@ public class Controller {
 		}
 	}
 
-	public void processOnLoadWad(Palette palette) {
+	public void processOnLoadWad(ColorModel palette) {
+		view.setPalette(palette);
 		view.getPalettePanel().setPalette(palette);
 		view.getPalettePanel().repaint();
 		view.getList().setCellRenderer(new WadCellRenderer().wad(currentWad));
@@ -82,12 +83,12 @@ public class Controller {
 	public void showCurrentResource() {
 		final JList list = view.getList();
 		if (list.getSelectedIndex() >= 0) {
-			final Palette palette = view.getPalettePanel().getPalette();
+			final ColorModel palette = view.getPalette();
 			if (palette != null) {
 				final byte[] imageFile = currentWad.get(list.getSelectedIndex()).getContent();
 				try {
 					final ImagePanel imagePanel = view.getImagePanel();
-					currentImage = doomGraphicsConverter.convertSprite(imageFile, palette);
+					currentImage = doomGraphicsConverter.convertSprite(imageFile, view.getPalette());
 					imagePanel.setImage(currentImage);
 					imagePanel.repaint();
 					showStatus("");

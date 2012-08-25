@@ -1,17 +1,14 @@
 package ru.doom.wad.logic.graphics;
 
 import com.google.inject.Singleton;
-import ru.doom.wad.view.widget.Palette;
 
-import java.awt.Color;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
+import java.awt.image.*;
 
 @Singleton
 public class DoomGraphicsConverter {
 
-	public Image convertSprite(byte[] imageFile, Palette palette) throws GraphicsParsingException {
+	public Image convertSprite(byte[] imageFile, ColorModel palette) throws GraphicsParsingException {
 
 		final ContentParser parser = new ContentParser(imageFile);
 
@@ -28,8 +25,7 @@ public class DoomGraphicsConverter {
 		}
 
 		// starting to draw image
-		final BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-		final WritableRaster raster = image.getRaster();
+		final byte[] data = new byte[h * w];
 
 		for (int x = 0; x < w; x++) {
 			parser.seek(columns[x]);
@@ -38,16 +34,14 @@ public class DoomGraphicsConverter {
 				final int numpixels = parser.readByte();
 				final int[] pixels = parser.readBytes(numpixels + 2);
 				for (int j = 0; j < numpixels; j++) {
-					final Color color = palette.get(pixels[j]);
-					raster.setPixel(x, startrow + j, new int[]{
-							color.getRed(),
-							color.getGreen(),
-							color.getBlue()
-					});
+					data[(startrow + j) * w + x] = (byte)pixels[j];
 				}
 			}
 		}
-		return image;
+		final DataBuffer dataBuffer = new DataBufferByte(data, h * w);
+		final SampleModel sampleModel = new SinglePixelPackedSampleModel(DataBuffer.TYPE_BYTE, w, h, new int[]{0xFF});
+		final WritableRaster raster = Raster.createWritableRaster(sampleModel, dataBuffer, null);
+		return new BufferedImage(palette, raster, false, null);
 	}
 
 	private void assertIsOffset(int off, int size) throws GraphicsParsingException {

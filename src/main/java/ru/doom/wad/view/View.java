@@ -5,6 +5,7 @@ import ru.doom.wad.view.widget.ImagePanel;
 import ru.doom.wad.view.widget.PalettePanel;
 
 import javax.swing.*;
+import java.awt.image.ColorModel;
 
 @Singleton
 public class View {
@@ -20,6 +21,7 @@ public class View {
 	private PalettePanel palettePanel;
 	private ImagePanel imagePanel;
 	private JButton saveImageButton;
+	private ColorModel palette;
 
 	public JFrame getFrame() {
 		return frame;
@@ -107,5 +109,13 @@ public class View {
 
 	public void setSaveImageButton(JButton saveImageButton) {
 		this.saveImageButton = saveImageButton;
+	}
+
+	public ColorModel getPalette() {
+		return palette;
+	}
+
+	public void setPalette(ColorModel palette) {
+		this.palette = palette;
 	}
 }

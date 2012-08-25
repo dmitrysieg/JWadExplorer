@@ -7,8 +7,8 @@ import ru.doom.wad.logic.WadUtils;
 import ru.doom.wad.view.Controller;
 import ru.doom.wad.view.View;
 import ru.doom.wad.view.palette.PaletteReader;
-import ru.doom.wad.view.widget.Palette;
 
+import java.awt.image.ColorModel;
 import java.io.File;
 
 public class OpenWadTask implements Runnable {
@@ -36,7 +36,7 @@ public class OpenWadTask implements Runnable {
 				controller.showProgress();
 				Wad wad = new IWadReader(view.getProgressBar()).read(file);
 				controller.setCurrentWad(wad);
-				final Palette palette = paletteReader.readPalette(wadUtils.findByName(wad, "PLAYPAL").getContent(), 0);
+				final ColorModel palette = paletteReader.readPalette(wadUtils.findByName(wad, "PLAYPAL").getContent(), 0);
 				controller.processOnLoadWad(palette);
 			} catch (Exception e) {
 				controller.showError("Error opening WAD file", e.getLocalizedMessage());

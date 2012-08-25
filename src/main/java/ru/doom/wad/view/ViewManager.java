@@ -76,6 +76,7 @@ public class ViewManager {
 		eastPanel.setLayout(new BoxLayout(eastPanel, BoxLayout.Y_AXIS));
 
 		final PalettePanel palettePanel = new PalettePanel();
+		palettePanel.init();
 		palettePanel.setPreferredSize(new Dimension(200, 0));
 		view.setPalettePanel(palettePanel);
 		eastPanel.add(palettePanel);
