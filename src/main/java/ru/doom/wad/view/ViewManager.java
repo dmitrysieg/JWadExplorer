@@ -2,6 +2,7 @@ package ru.doom.wad.view;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import ru.doom.wad.view.listeners.Listeners;
 import ru.doom.wad.view.widget.ImagePanel;
 import ru.doom.wad.view.widget.PalettePanel;
 
@@ -16,7 +17,7 @@ public class ViewManager {
 	@Inject
 	private Listeners listeners;
 	@Inject
-	private Controller controller;
+	private View view;
 
 	public JFrame createMainFrame() {
 		final JFrame mainFrame = new JFrame();
@@ -31,13 +32,13 @@ public class ViewManager {
 
 		final JPanel southPanel = new JPanel();
 		southPanel.setLayout(new CardLayout());
-		controller.setStatusPanel(southPanel);
+		view.setStatusPanel(southPanel);
 
 		final JProgressBar progressBar = createProgressBar();
-		controller.setProgressBar(progressBar);
+		view.setProgressBar(progressBar);
 		southPanel.add(progressBar, Controller.SOUTH_PROGRESS);
 		final JLabel statusLabel = new JLabel();
-		controller.setStatusLabel(statusLabel);
+		view.setStatusLabel(statusLabel);
 		southPanel.add(statusLabel, Controller.SOUTH_STATUS);
 
 		mainFrame.getContentPane().add(southPanel, BorderLayout.SOUTH);
@@ -50,14 +51,14 @@ public class ViewManager {
 		final JTextField quickSearch = new JTextField();
 		quickSearch.setMaximumSize(new Dimension(Integer.MAX_VALUE, 16));
 		quickSearch.addKeyListener(listeners.getQuickSearchActionListener());
-		controller.setQuickSearch(quickSearch);
+		view.setQuickSearch(quickSearch);
 		westPanel.add(quickSearch);
 
-		controller.setList(createList());
-		final JScrollPane listPane = new JScrollPane(controller.getList());
+		view.setList(createList());
+		final JScrollPane listPane = new JScrollPane(view.getList());
 		listPane.setPreferredSize(new Dimension(200, 0));
 		listPane.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		controller.setListPane(listPane);
+		view.setListPane(listPane);
 		westPanel.add(listPane);
 
 		mainFrame.getContentPane().add(westPanel, BorderLayout.WEST);
@@ -70,7 +71,7 @@ public class ViewManager {
 
 		final PalettePanel palettePanel = new PalettePanel();
 		palettePanel.setPreferredSize(new Dimension(200, 0));
-		controller.setPalettePanel(palettePanel);
+		view.setPalettePanel(palettePanel);
 		eastPanel.add(palettePanel);
 
 		mainFrame.getContentPane().add(eastPanel, BorderLayout.EAST);
@@ -82,7 +83,7 @@ public class ViewManager {
 
 		final ImagePanel imagePanel = new ImagePanel();
 		imagePanel.setPreferredSize(new Dimension(200, 200));
-		controller.setImagePanel(imagePanel);
+		view.setImagePanel(imagePanel);
 		
 		final GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.CENTER;
@@ -130,7 +131,7 @@ public class ViewManager {
 
 		final JPopupMenu wadListMenu = createWadListMenu();
 		wadListMenu.setInvoker(list);
-		controller.setWadListMenu(wadListMenu);
+		view.setWadListMenu(wadListMenu);
 		list.addMouseListener(listeners.getWadListMouseListener());
 
 		return list;

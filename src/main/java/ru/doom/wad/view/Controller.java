@@ -7,7 +7,6 @@ import ru.doom.wad.logic.graphics.DoomGraphicsConverter;
 import ru.doom.wad.logic.graphics.GraphicsParsingException;
 import ru.doom.wad.view.widget.ImagePanel;
 import ru.doom.wad.view.widget.Palette;
-import ru.doom.wad.view.widget.PalettePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +17,9 @@ public class Controller {
 
 	public static final String SOUTH_PROGRESS = "PROGRESS";
 	public static final String SOUTH_STATUS = "STATUS";
-	
+
+	@Inject
+	private View view;
 	@Inject
 	private DialogManager dialogManager;
 	@Inject
@@ -26,65 +27,9 @@ public class Controller {
 	@Inject
 	private DoomGraphicsConverter doomGraphicsConverter;
 
-	private int openedFilesCount;
-	private JFrame frame;
-	private JProgressBar progressBar;
-	private JLabel statusLabel;
-	private JPanel statusPanel;
-	private JList list;
-	private JComponent listPane;
-	private JTextField quickSearch;
-	private JPopupMenu wadListMenu;
-	private PalettePanel palettePanel;
-	private ImagePanel imagePanel;
-
-	public void setFrame(JFrame frame) {
-		this.frame = frame;
-	}
-
-	public JFrame getFrame() {
-		return frame;
-	}
-
-	public JProgressBar getProgressBar() {
-		return progressBar;
-	}
-
-	public void setProgressBar(JProgressBar progressBar) {
-		this.progressBar = progressBar;
-	}
-
-	public JList getList() {
-		return list;
-	}
-
-	public void setList(JList list) {
-		this.list = list;
-	}
-
-	public void handleOpenedWad() {
-		if (openedFilesCount == 0) {
-		}
-	}
-
-	public JComponent getListPane() {
-		return listPane;
-	}
-
-	public void setListPane(JComponent listPane) {
-		this.listPane = listPane;
-	}
-
-	public JTextField getQuickSearch() {
-		return quickSearch;
-	}
-
-	public void setQuickSearch(JTextField quickSearch) {
-		this.quickSearch = quickSearch;
-	}
-
 	public void processQuickSearch() {
-		String prefix = quickSearch.getText();
+		String prefix = view.getQuickSearch().getText();
+		final JList list = view.getList();
 		for (int i = 0; i < list.getModel().getSize(); i++) {
 			if (((String)list.getModel().getElementAt(i)).startsWith(prefix)) {
 				list.setSelectedIndex(i);
@@ -95,49 +40,31 @@ public class Controller {
 	}
 
 	public void controlWadListMenu(Component invoker, int x, int y) {
-		if (list.getSelectedIndex() >= 0) {
-			wadListMenu.show(invoker, x, y);
+		if (view.getList().getSelectedIndex() >= 0) {
+			view.getWadListMenu().show(invoker, x, y);
 		}
-	}
-
-	public JPopupMenu getWadListMenu() {
-		return wadListMenu;
-	}
-
-	public void setWadListMenu(JPopupMenu wadListMenu) {
-		this.wadListMenu = wadListMenu;
 	}
 
 	public void controlSaveWadFile() {
+		final JList list = view.getList();
 		try {
 			fileController.saveWadFile(
-					dialogManager.selectSaveWadFile(frame, list.getSelectedValue().toString()),
+					dialogManager.selectSaveWadFile(list.getSelectedValue().toString()),
 					((WadListModel)list.getModel()).getWad().get(list.getSelectedIndex()).getContent()
 			);
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(
-					frame,
-					e.getLocalizedMessage(),
-					"Error saving file",
-					JOptionPane.ERROR_MESSAGE
-			);
+			dialogManager.showErrorMessageDialog("Error saving file", e.getLocalizedMessage());
 		}
 	}
 
-	public PalettePanel getPalettePanel() {
-		return palettePanel;
-	}
-
-	public void setPalettePanel(PalettePanel palettePanel) {
-		this.palettePanel = palettePanel;
-	}
-
 	public void showCurrentResource() {
+		final JList list = view.getList();
 		if (list.getSelectedIndex() >= 0) {
-			final Palette palette = palettePanel.getPalette();
+			final Palette palette = view.getPalettePanel().getPalette();
 			if (palette != null) {
 				final byte[] imageFile = ((WadListModel)list.getModel()).getWad().get(list.getSelectedIndex()).getContent();
 				try {
+					final ImagePanel imagePanel = view.getImagePanel();
 					imagePanel.setImage(doomGraphicsConverter.convertSprite(imageFile, palette));
 					imagePanel.repaint();
 					showStatus("");
@@ -149,37 +76,17 @@ public class Controller {
 	}
 
 	private void showStatus(String status) {
-		statusLabel.setText(status);
-		final CardLayout cardLayout = (CardLayout)statusPanel.getLayout();
-		cardLayout.show(statusPanel, SOUTH_STATUS);
+		view.getStatusLabel().setText(status);
+		final CardLayout cardLayout = (CardLayout)view.getStatusPanel().getLayout();
+		cardLayout.show(view.getStatusPanel(), SOUTH_STATUS);
 	}
 
 	public void showProgress() {
-		final CardLayout cardLayout = (CardLayout)statusPanel.getLayout();
-		cardLayout.show(statusPanel, SOUTH_PROGRESS);
+		final CardLayout cardLayout = (CardLayout)view.getStatusPanel().getLayout();
+		cardLayout.show(view.getStatusPanel(), SOUTH_PROGRESS);
 	}
 
-	public ImagePanel getImagePanel() {
-		return imagePanel;
-	}
-
-	public void setImagePanel(ImagePanel imagePanel) {
-		this.imagePanel = imagePanel;
-	}
-
-	public JLabel getStatusLabel() {
-		return statusLabel;
-	}
-
-	public void setStatusLabel(JLabel statusLabel) {
-		this.statusLabel = statusLabel;
-	}
-
-	public JPanel getStatusPanel() {
-		return statusPanel;
-	}
-
-	public void setStatusPanel(JPanel statusPanel) {
-		this.statusPanel = statusPanel;
+	public void showError(String header, String message) {
+		dialogManager.showErrorMessageDialog(header, message);
 	}
 }

@@ -2,7 +2,7 @@ package ru.doom.wad;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import ru.doom.wad.view.Controller;
+import ru.doom.wad.view.View;
 import ru.doom.wad.view.ViewManager;
 
 import javax.swing.*;
@@ -17,7 +17,7 @@ public class App {
 			@Override
 			public void run() {
 				JFrame mainFrame = injector.getInstance(ViewManager.class).createMainFrame();
-				injector.getInstance(Controller.class).setFrame(mainFrame);
+				injector.getInstance(View.class).setFrame(mainFrame);
 			}
 		});
 	}

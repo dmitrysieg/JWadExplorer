@@ -5,18 +5,20 @@ import ru.doom.wad.logic.IWadReader;
 import ru.doom.wad.logic.Wad;
 import ru.doom.wad.logic.WadUtils;
 import ru.doom.wad.view.Controller;
+import ru.doom.wad.view.View;
 import ru.doom.wad.view.WadCellRenderer;
 import ru.doom.wad.view.WadListModel;
 import ru.doom.wad.view.palette.PaletteReader;
 import ru.doom.wad.view.widget.Palette;
 
-import javax.swing.*;
 import java.io.File;
 
 public class OpenWadTask implements Runnable {
 
 	@Inject
 	private Controller controller;
+	@Inject
+	private View view;
 	@Inject
 	private WadListModel wadListModel;
 	@Inject
@@ -36,20 +38,15 @@ public class OpenWadTask implements Runnable {
 		if (file != null) {
 			try {
 				controller.showProgress();
-				Wad wad = new IWadReader(controller.getProgressBar()).read(file);
+				Wad wad = new IWadReader(view.getProgressBar()).read(file);
 				Palette palette = paletteReader.readPalette(wadUtils.findByName(wad, "PLAYPAL").getContent(), 0);
-				controller.getPalettePanel().setPalette(palette);
-				controller.getPalettePanel().repaint();
-				controller.getList().setCellRenderer(new WadCellRenderer().wad(wad));
-				controller.getList().setModel(wadListModel.withWad(wad));
-				controller.getListPane().doLayout();
+				view.getPalettePanel().setPalette(palette);
+				view.getPalettePanel().repaint();
+				view.getList().setCellRenderer(new WadCellRenderer().wad(wad));
+				view.getList().setModel(wadListModel.withWad(wad));
+				view.getListPane().doLayout();
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(
-						controller.getFrame(),
-						e.getLocalizedMessage(),
-						"Error opening WAD file",
-						JOptionPane.ERROR_MESSAGE
-				);
+				controller.showError("Error opening WAD file", e.getLocalizedMessage());
 			}
 		}
 	}

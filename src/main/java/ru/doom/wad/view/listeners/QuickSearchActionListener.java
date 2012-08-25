@@ -1,7 +1,8 @@
-package ru.doom.wad.view;
+package ru.doom.wad.view.listeners;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import ru.doom.wad.view.Controller;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
