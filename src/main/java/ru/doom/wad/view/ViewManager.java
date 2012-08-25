@@ -19,7 +19,7 @@ public class ViewManager {
 	private Controller controller;
 
 	public JFrame createMainFrame() {
-		JFrame mainFrame = new JFrame();
+		final JFrame mainFrame = new JFrame();
 		mainFrame.setTitle("WAD Explorer v.1.0");
 		mainFrame.setSize(400, 300);
 
@@ -34,17 +34,17 @@ public class ViewManager {
 
 		/* WEST */
 
-		JPanel westPanel = new JPanel();
+		final JPanel westPanel = new JPanel();
 		westPanel.setLayout(new BoxLayout(westPanel, BoxLayout.Y_AXIS));
 
-		JTextField quickSearch = new JTextField();
+		final JTextField quickSearch = new JTextField();
 		quickSearch.setMaximumSize(new Dimension(Integer.MAX_VALUE, 16));
 		quickSearch.addKeyListener(listeners.getQuickSearchActionListener());
 		controller.setQuickSearch(quickSearch);
 		westPanel.add(quickSearch);
 
 		controller.setList(createList());
-		JScrollPane listPane = new JScrollPane(controller.getList());
+		final JScrollPane listPane = new JScrollPane(controller.getList());
 		listPane.setPreferredSize(new Dimension(200, 0));
 		listPane.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		controller.setListPane(listPane);
@@ -54,11 +54,11 @@ public class ViewManager {
 
 		/* EAST */
 
-		JPanel eastPanel = new JPanel();
+		final JPanel eastPanel = new JPanel();
 		eastPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		eastPanel.setLayout(new BoxLayout(eastPanel, BoxLayout.Y_AXIS));
 
-		PalettePanel palettePanel = new PalettePanel();
+		final PalettePanel palettePanel = new PalettePanel();
 		palettePanel.setPreferredSize(new Dimension(200, 0));
 		controller.setPalettePanel(palettePanel);
 		eastPanel.add(palettePanel);
@@ -67,11 +67,18 @@ public class ViewManager {
 
 		/* CENTER */
 
-		JPanel centerPanel = new JPanel();
-		ImagePanel imagePanel = new ImagePanel();
+		final JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(new GridBagLayout());
+
+		final ImagePanel imagePanel = new ImagePanel();
 		imagePanel.setPreferredSize(new Dimension(200, 200));
 		controller.setImagePanel(imagePanel);
-		centerPanel.add(imagePanel);
+		
+		final GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.CENTER;
+		c.gridx = 1;
+		c.gridy = 1;
+		centerPanel.add(imagePanel, c);
 
 		mainFrame.getContentPane().add(centerPanel, BorderLayout.CENTER);
 
@@ -81,20 +88,20 @@ public class ViewManager {
 	}
 
 	public JMenuBar createMainMenu() {
-		JMenuBar menuBar = new JMenuBar();
+		final JMenuBar menuBar = new JMenuBar();
 
-		JMenu fileMenu = new JMenu("File");
+		final JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 
-		JMenuItem openItem = new JMenuItem("Open", KeyEvent.VK_O);
+		final JMenuItem openItem = new JMenuItem("Open", KeyEvent.VK_O);
 		openItem.addActionListener(listeners.getMainMenuActionListener());
 		fileMenu.add(openItem);
-		JMenuItem saveItem = new JMenuItem("Save", KeyEvent.VK_S);
+		final JMenuItem saveItem = new JMenuItem("Save", KeyEvent.VK_S);
 		fileMenu.add(saveItem);
 
 		menuBar.add(fileMenu);
 
-		JMenu helpMenu = new JMenu("Help");
+		final JMenu helpMenu = new JMenu("Help");
 		helpMenu.setMnemonic(KeyEvent.VK_H);
 		menuBar.add(helpMenu);
 
@@ -102,16 +109,16 @@ public class ViewManager {
 	}
 
 	public JProgressBar createProgressBar() {
-		JProgressBar progressBar = new JProgressBar(JProgressBar.HORIZONTAL);
+		final JProgressBar progressBar = new JProgressBar(JProgressBar.HORIZONTAL);
 		progressBar.setPreferredSize(new Dimension(0, 16));
 		return progressBar;
 	}
 
 	public JList createList() {
-		JList list = new JList();
+		final JList list = new JList();
 		list.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 
-		JPopupMenu wadListMenu = createWadListMenu();
+		final JPopupMenu wadListMenu = createWadListMenu();
 		wadListMenu.setInvoker(list);
 		controller.setWadListMenu(wadListMenu);
 		list.addMouseListener(listeners.getWadListMouseListener());
@@ -120,9 +127,9 @@ public class ViewManager {
 	}
 
 	public JPopupMenu createWadListMenu() {
-		JPopupMenu wadListMenu = new JPopupMenu();
+		final JPopupMenu wadListMenu = new JPopupMenu();
 
-		JMenuItem saveItem = new JMenuItem("Save file");
+		final JMenuItem saveItem = new JMenuItem("Save file");
 		saveItem.addActionListener(listeners.getPopupMenuListener());
 		wadListMenu.add(saveItem);
 
