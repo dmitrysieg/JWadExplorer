@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import ru.doom.wad.logic.FileController;
 import ru.doom.wad.logic.graphics.DoomGraphicsConverter;
+import ru.doom.wad.logic.graphics.GraphicsParsingException;
 import ru.doom.wad.view.widget.ImagePanel;
 import ru.doom.wad.view.widget.Palette;
 import ru.doom.wad.view.widget.PalettePanel;
@@ -15,6 +16,9 @@ import java.io.IOException;
 @Singleton
 public class Controller {
 
+	public static final String SOUTH_PROGRESS = "PROGRESS";
+	public static final String SOUTH_STATUS = "STATUS";
+	
 	@Inject
 	private DialogManager dialogManager;
 	@Inject
@@ -25,6 +29,8 @@ public class Controller {
 	private int openedFilesCount;
 	private JFrame frame;
 	private JProgressBar progressBar;
+	private JLabel statusLabel;
+	private JPanel statusPanel;
 	private JList list;
 	private JComponent listPane;
 	private JTextField quickSearch;
@@ -131,10 +137,26 @@ public class Controller {
 			final Palette palette = palettePanel.getPalette();
 			if (palette != null) {
 				final byte[] imageFile = ((WadListModel)list.getModel()).getWad().get(list.getSelectedIndex()).getContent();
-				imagePanel.setImage(doomGraphicsConverter.convertSprite(imageFile, palette));
-				imagePanel.repaint();
+				try {
+					imagePanel.setImage(doomGraphicsConverter.convertSprite(imageFile, palette));
+					imagePanel.repaint();
+					showStatus("");
+				} catch (GraphicsParsingException e) {
+					showStatus("Not a graphics file");
+				}
 			}
 		}
+	}
+
+	private void showStatus(String status) {
+		statusLabel.setText(status);
+		final CardLayout cardLayout = (CardLayout)statusPanel.getLayout();
+		cardLayout.show(statusPanel, SOUTH_STATUS);
+	}
+
+	public void showProgress() {
+		final CardLayout cardLayout = (CardLayout)statusPanel.getLayout();
+		cardLayout.show(statusPanel, SOUTH_PROGRESS);
 	}
 
 	public ImagePanel getImagePanel() {
@@ -143,5 +165,21 @@ public class Controller {
 
 	public void setImagePanel(ImagePanel imagePanel) {
 		this.imagePanel = imagePanel;
+	}
+
+	public JLabel getStatusLabel() {
+		return statusLabel;
+	}
+
+	public void setStatusLabel(JLabel statusLabel) {
+		this.statusLabel = statusLabel;
+	}
+
+	public JPanel getStatusPanel() {
+		return statusPanel;
+	}
+
+	public void setStatusPanel(JPanel statusPanel) {
+		this.statusPanel = statusPanel;
 	}
 }

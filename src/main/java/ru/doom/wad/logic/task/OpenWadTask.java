@@ -35,6 +35,7 @@ public class OpenWadTask implements Runnable {
 	public void run() {
 		if (file != null) {
 			try {
+				controller.showProgress();
 				Wad wad = new IWadReader(controller.getProgressBar()).read(file);
 				Palette palette = paletteReader.readPalette(wadUtils.findByName(wad, "PLAYPAL").getContent(), 0);
 				controller.getPalettePanel().setPalette(palette);

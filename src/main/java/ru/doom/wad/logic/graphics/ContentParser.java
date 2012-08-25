@@ -13,15 +13,21 @@ public class ContentParser {
 		return content[cursor] & 0xFF;
 	}
 	
-	public int readByte() {
+	public int readByte() throws GraphicsParsingException {
+		if (cursor >= content.length) {
+			throw new GraphicsParsingException();
+		}
 		return content[cursor++] & 0xFF;
 	}
 
-	public void seek(int offset) {
+	public void seek(int offset) throws GraphicsParsingException {
+		if (offset >= content.length) {
+			throw new GraphicsParsingException();
+		}
 		cursor = offset;
 	}
 	
-	public int[] readBytes(int length) {
+	public int[] readBytes(int length) throws GraphicsParsingException {
 		final int[] array = new int[length];
 		for (int i = 0; i < length; i++) {
 			array[i] = readByte();
@@ -29,17 +35,17 @@ public class ContentParser {
 		return array;
 	}
 	
-	public int readShort() {
+	public int readShort() throws GraphicsParsingException {
 		return readByte() | (readByte() << 8);
 	}
 	
-	public int readInt() {
+	public int readInt() throws GraphicsParsingException {
 		return readByte() |(readByte() << 8)
 				|(readByte() << 16)
 				|(readByte() << 24);
 	}
 
-	public int[] readArrayInt(int length) {
+	public int[] readArrayInt(int length) throws GraphicsParsingException {
 		final int[] array = new int[length];
 		for (int i = 0; i < length; i++) {
 			array[i] = readInt();

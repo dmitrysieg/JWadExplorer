@@ -29,8 +29,18 @@ public class ViewManager {
 
 		/* SOUTH */
 
-		controller.setProgressBar(createProgressBar());
-		mainFrame.getContentPane().add(controller.getProgressBar(), BorderLayout.SOUTH);
+		final JPanel southPanel = new JPanel();
+		southPanel.setLayout(new CardLayout());
+		controller.setStatusPanel(southPanel);
+
+		final JProgressBar progressBar = createProgressBar();
+		controller.setProgressBar(progressBar);
+		southPanel.add(progressBar, Controller.SOUTH_PROGRESS);
+		final JLabel statusLabel = new JLabel();
+		controller.setStatusLabel(statusLabel);
+		southPanel.add(statusLabel, Controller.SOUTH_STATUS);
+
+		mainFrame.getContentPane().add(southPanel, BorderLayout.SOUTH);
 
 		/* WEST */
 

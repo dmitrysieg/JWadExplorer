@@ -11,16 +11,21 @@ import java.awt.image.WritableRaster;
 @Singleton
 public class DoomGraphicsConverter {
 
-	public Image convertSprite(byte[] imageFile, Palette palette) {
+	public Image convertSprite(byte[] imageFile, Palette palette) throws GraphicsParsingException {
 
 		final ContentParser parser = new ContentParser(imageFile);
 
 		final int w = parser.readShort();
+		assertPositiveShort(w);
 		final int h = parser.readShort();
+		assertPositiveShort(h);
 		final int loff = parser.readShort();
 		final int toff = parser.readShort();
 
 		final int[] columns = parser.readArrayInt(w);
+		for (int off : columns) {
+			assertIsOffset(off, imageFile.length);
+		}
 
 		// starting to draw image
 		final BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
@@ -43,5 +48,17 @@ public class DoomGraphicsConverter {
 			}
 		}
 		return image;
+	}
+
+	private void assertIsOffset(int off, int size) throws GraphicsParsingException {
+		if (off < 0 || off > size) {
+			throw new GraphicsParsingException();
+		}
+	}
+
+	private void assertPositiveShort(int a) throws GraphicsParsingException {
+		if (a <= 0 || a > 32767) {
+			throw new GraphicsParsingException();
+		}
 	}
 }
