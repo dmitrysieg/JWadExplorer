@@ -86,17 +86,12 @@ public class ViewManager {
 		/* CENTER */
 
 		final JPanel centerPanel = new JPanel();
-		centerPanel.setLayout(new GridBagLayout());
+		centerPanel.setLayout(new CardLayout(10, 10));
 
 		final ImagePanel imagePanel = new ImagePanel();
-		imagePanel.setPreferredSize(new Dimension(200, 200));
 		view.setImagePanel(imagePanel);
-		
-		final GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.CENTER;
-		c.gridx = 1;
-		c.gridy = 1;
-		centerPanel.add(imagePanel, c);
+
+		centerPanel.add(imagePanel, "PREVIEW");
 
 		mainFrame.getContentPane().add(centerPanel, BorderLayout.CENTER);
 
