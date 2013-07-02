@@ -50,6 +50,7 @@ public class IWadReader {
 		}
 
 		reader.close();
+		progressBar.setValue(0);
 		return wad;
 	}
 
