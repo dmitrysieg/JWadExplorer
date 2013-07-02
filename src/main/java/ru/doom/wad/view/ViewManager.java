@@ -80,7 +80,11 @@ public class ViewManager {
 		palettePanel.init();
 		palettePanel.setPreferredSize(new Dimension(200, 0));
 		view.setPalettePanel(palettePanel);
-		eastPanel.add(palettePanel);
+
+		final JToolBar paletteToolbar = new JToolBar(SwingConstants.VERTICAL);
+		paletteToolbar.setPreferredSize(new Dimension(200, 200));
+		paletteToolbar.add(palettePanel);
+		eastPanel.add(paletteToolbar);
 
 		mainFrame.getContentPane().add(eastPanel, BorderLayout.EAST);
 

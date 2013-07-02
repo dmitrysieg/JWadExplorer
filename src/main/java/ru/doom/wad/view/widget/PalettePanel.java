@@ -38,12 +38,13 @@ public class PalettePanel extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-
 		if (raster != null && paletteImage != null) {
-			final int h = g.getClipBounds().height;
-			final int w = g.getClipBounds().width;
-
-			g.drawImage(paletteImage, 0, 0, w, h, null);
+			final int d = min(g.getClipBounds().height, g.getClipBounds().width);
+			g.drawImage(paletteImage, 0, 0, d, d, null);
 		}
+	}
+
+	private static int min(int a, int b) {
+		return a < b ? a : b;
 	}
 }
