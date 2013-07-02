@@ -134,7 +134,7 @@ public class Controller {
 	public void saveCurrentImage() {
 		try {
 			fileController.saveImageFile(
-					dialogManager.selectSaveWadFile(view.getList().getSelectedValue().toString()),
+					dialogManager.selectSaveImageFile(view.getList().getSelectedValue().toString()),
 					currentImage
 			);
 		} catch (Exception e) {
