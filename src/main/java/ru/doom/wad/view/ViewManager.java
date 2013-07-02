@@ -23,6 +23,7 @@ public class ViewManager {
 	public JFrame createMainFrame() {
 		final JFrame mainFrame = new JFrame();
 		mainFrame.setTitle("WAD Explorer v.1.0");
+		mainFrame.setSize(860, 530);
 		mainFrame.setExtendedState(Frame.MAXIMIZED_BOTH);
 
 		mainFrame.setJMenuBar(createMainMenu());
