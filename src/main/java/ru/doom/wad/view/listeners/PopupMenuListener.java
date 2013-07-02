@@ -2,6 +2,7 @@ package ru.doom.wad.view.listeners;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import ru.doom.wad.view.Commands;
 import ru.doom.wad.view.Controller;
 
 import java.awt.event.ActionEvent;
@@ -15,7 +16,7 @@ public class PopupMenuListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if ("Save file".equals(e.getActionCommand())) {
+		if (Commands.SAVE_FILE.equals(e.getActionCommand())) {
 			controller.controlSaveWadFile();
 		}
 	}

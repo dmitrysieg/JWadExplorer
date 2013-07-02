@@ -143,7 +143,7 @@ public class ViewManager {
 	public JPopupMenu createWadListMenu() {
 		final JPopupMenu wadListMenu = new JPopupMenu();
 
-		final JMenuItem saveItem = new JMenuItem("Save file");
+		final JMenuItem saveItem = new JMenuItem(Commands.SAVE_FILE);
 		saveItem.addActionListener(listeners.getPopupMenuListener());
 		wadListMenu.add(saveItem);
 
