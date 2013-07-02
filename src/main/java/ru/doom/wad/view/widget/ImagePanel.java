@@ -3,13 +3,12 @@ package ru.doom.wad.view.widget;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.*;
-import java.net.URL;
 
 public class ImagePanel extends JPanel {
 
-	private static final int TILE_SIZE = 10;
+	private static final int TILE_SIZE = 5;
 
-	private final Image tile;
+	private final TexturePaint texture;
 	private Image image;
 	
 	public void setImage(Image image) {
@@ -18,10 +17,9 @@ public class ImagePanel extends JPanel {
 
 	public ImagePanel() {
 		super();
-		final URL url = this.getClass().getResource("tile.png");
-		tile = Toolkit.getDefaultToolkit().createImage(url);
+		texture = createTileTexture();
 	}
-	
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -32,11 +30,21 @@ public class ImagePanel extends JPanel {
 		if (image != null) {
 			g.drawImage(image, 0, 0, w, h, null);
 		} else {
-			for (int j = 0; j < h; j += TILE_SIZE) {
-				for (int i = 0; i < w; i += TILE_SIZE) {
-					g.drawImage(tile, i, j, TILE_SIZE, TILE_SIZE, null);
-				}
-			}			
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setPaint(texture);
+			g2d.fill(g2d.getClip());
 		}
+	}
+
+	private static TexturePaint createTileTexture() {
+		BufferedImage bufferedImage = new BufferedImage(TILE_SIZE * 2, TILE_SIZE * 2, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2 = bufferedImage.createGraphics();
+		g2.setPaint(Color.GRAY);
+		g2.fill(new Rectangle(0, 0, TILE_SIZE, TILE_SIZE));
+		g2.fill(new Rectangle(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE));
+		g2.setPaint(Color.WHITE);
+		g2.fill(new Rectangle(0, TILE_SIZE, TILE_SIZE, TILE_SIZE));
+		g2.fill(new Rectangle(TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+		return new TexturePaint(bufferedImage, new Rectangle(TILE_SIZE * 2, TILE_SIZE * 2));
 	}
 }
