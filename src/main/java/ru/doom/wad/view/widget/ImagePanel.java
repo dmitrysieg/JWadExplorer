@@ -8,16 +8,11 @@ public class ImagePanel extends JPanel {
 
 	private static final int TILE_SIZE = 5;
 
-	private final TexturePaint texture;
+	private static TexturePaint texture = createTileTexture();
 	private Image image;
 	
 	public void setImage(Image image) {
 		this.image = image;
-	}
-
-	public ImagePanel() {
-		super();
-		texture = createTileTexture();
 	}
 
 	@Override
