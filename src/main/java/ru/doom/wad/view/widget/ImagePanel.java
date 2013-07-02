@@ -28,7 +28,15 @@ public class ImagePanel extends JPanel {
 		final int w = g.getClipBounds().width;
 
 		if (image != null) {
-			g.drawImage(image, 0, 0, w, h, null);
+			final Rectangle rect = getResizedImageRect(w, h, image.getWidth(null), image.getHeight(null));
+			g.drawImage(
+					image,
+					rect.x,
+					rect.y,
+					rect.width,
+					rect.height,
+					null
+			);
 		} else {
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setPaint(texture);
@@ -36,10 +44,40 @@ public class ImagePanel extends JPanel {
 		}
 	}
 
+	/**
+	 * Make drawing image preserve its ratio and resize it according to clip constraints
+	 */
+	private static Rectangle getResizedImageRect(
+			int clipWidth,
+			int clipHeight,
+			int imageWidth,
+			int imageHeight
+	) {
+		final double clipRatio = ((double) clipWidth) / ((double) clipHeight);
+		final double imageRatio = ((double) imageWidth) / ((double) imageHeight);
+		if (imageRatio < clipRatio) {
+			final int newWidth = (int)(clipHeight * imageRatio);
+			return new Rectangle(
+					(clipWidth - newWidth) / 2,
+					0,
+					newWidth,
+					clipHeight
+			);
+		} else {
+			final int newHeight = (int)(clipWidth / imageRatio);
+			return new Rectangle(
+					0,
+					(clipHeight - newHeight) / 2,
+					clipWidth,
+					newHeight
+			);
+		}
+	}
+
 	private static TexturePaint createTileTexture() {
 		BufferedImage bufferedImage = new BufferedImage(TILE_SIZE * 2, TILE_SIZE * 2, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2 = bufferedImage.createGraphics();
-		g2.setPaint(Color.GRAY);
+		g2.setPaint(Color.LIGHT_GRAY);
 		g2.fill(new Rectangle(0, 0, TILE_SIZE, TILE_SIZE));
 		g2.fill(new Rectangle(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE));
 		g2.setPaint(Color.WHITE);
