@@ -102,6 +102,8 @@ public class ViewManager {
 
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		mainFrame.setVisible(true);
+
+		view.setFrame(mainFrame);
 		return mainFrame;
 	}
 
