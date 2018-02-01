@@ -1,12 +1,12 @@
 package ru.doom.wad.view.dialog;
 
-import com.google.inject.Singleton;
+import org.springframework.stereotype.Component;
 
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 import java.util.regex.Pattern;
 
-@Singleton
+@Component
 public final class FileFilters {
 
 	public static final FileFilter GIF_FILE_FILTER = createFileFilter("gif");

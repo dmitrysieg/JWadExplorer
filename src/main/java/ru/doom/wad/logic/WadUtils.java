@@ -1,19 +1,20 @@
 package ru.doom.wad.logic;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Singleton;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
-@Singleton
+import java.util.Optional;
+import java.util.function.Predicate;
+
+@Component
 public class WadUtils {
 
-	@Inject
-	private Injector injector;
+	@Autowired
+	private ApplicationContext context;
 
-	public WadEntry findByName(Wad wad, String name) {
-		return Iterables.find(wad, injector.getInstance(NameMatcher.class).ofName(name));
+	public Optional<WadEntry> findByName(Wad wad, String name) {
+		return wad.stream().filter(context.getBean(NameMatcher.class).ofName(name)).findFirst();
 	}
 
 	/*
@@ -31,7 +32,7 @@ public class WadUtils {
 
 	private static class NameMatcher implements Predicate<WadEntry> {
 
-		@Inject
+		@Autowired
 		private WadUtils wadUtils;
 
 		private String name;
@@ -45,7 +46,7 @@ public class WadUtils {
 		}
 
 		@Override
-		public boolean apply(/*@Nullable*/WadEntry wadEntry) {
+		public boolean test(/*@Nullable*/WadEntry wadEntry) {
 			return wadEntry != null && name.equals(wadUtils.trimNull(new String(wadEntry.getName())));
 		}
 	}

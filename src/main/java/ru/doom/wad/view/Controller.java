@@ -1,7 +1,6 @@
 package ru.doom.wad.view;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.doom.wad.logic.FileController;
 import ru.doom.wad.logic.Wad;
 import ru.doom.wad.logic.graphics.DoomGraphicsConverter;
@@ -14,7 +13,7 @@ import java.awt.image.ColorModel;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 
-@Singleton
+@org.springframework.stereotype.Component
 public class Controller {
 
 	public static final String SOUTH_PROGRESS = "PROGRESS";
@@ -24,23 +23,16 @@ public class Controller {
 	private Wad currentWad;
 	private RenderedImage currentImage;
 
-	@Inject
+	@Autowired
 	private View view;
-	@Inject
+	@Autowired
 	private DialogManager dialogManager;
-	@Inject
+	@Autowired
 	private WadListModel wadListModel;
-	@Inject
+	@Autowired
 	private FileController fileController;
-	@Inject
+	@Autowired
 	private DoomGraphicsConverter doomGraphicsConverter;
-
-	@Inject
-	public Controller() {
-		isAllowedSaveImage = false;
-		currentWad = null;
-		currentImage = null;
-	}
 
 	public void processQuickSearch() {
 		String prefix = view.getQuickSearch().getText();

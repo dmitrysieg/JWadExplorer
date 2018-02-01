@@ -1,7 +1,7 @@
 package ru.doom.wad.view;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.doom.wad.view.listeners.Listeners;
 import ru.doom.wad.view.widget.ImagePanel;
 import ru.doom.wad.view.widget.PalettePanel;
@@ -12,12 +12,12 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.net.URL;
 
-@Singleton
+@Component
 public class ViewManager {
 
-	@Inject
+	@Autowired
 	private Listeners listeners;
-	@Inject
+	@Autowired
 	private View view;
 
 	public JFrame createMainFrame() {

@@ -1,16 +1,16 @@
 package ru.doom.wad.view;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.doom.wad.view.dialog.FileFilters;
 
 import javax.swing.*;
 import java.io.File;
 
-@Singleton
+@Component
 public class DialogManager {
 
-	@Inject
+	@Autowired
 	private View view;
 	
 	public File selectOpenFile() {

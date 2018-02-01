@@ -1,20 +1,20 @@
 package ru.doom.wad.view.listeners;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-@Singleton
+@Component
 public class Listeners {
 
-	@Inject
+	@Autowired
 	private MainMenuActionListener mainMenuActionListener;
-	@Inject
+	@Autowired
 	private QuickSearchActionListener quickSearchActionListener;
-	@Inject
+	@Autowired
 	private WadListMouseListener wadListMouseListener;
-	@Inject
+	@Autowired
 	private PopupMenuListener popupMenuListener;
-	@Inject
+	@Autowired
 	private ToolbarActionListener toolbarActionListener;
 
 	public MainMenuActionListener getMainMenuActionListener() {

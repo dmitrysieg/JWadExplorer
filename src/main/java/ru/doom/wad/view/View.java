@@ -1,13 +1,13 @@
 package ru.doom.wad.view;
 
-import com.google.inject.Singleton;
+import org.springframework.stereotype.Component;
 import ru.doom.wad.view.widget.ImagePanel;
 import ru.doom.wad.view.widget.PalettePanel;
 
 import javax.swing.*;
 import java.awt.image.ColorModel;
 
-@Singleton
+@Component
 public class View {
 
 	private JFrame frame;

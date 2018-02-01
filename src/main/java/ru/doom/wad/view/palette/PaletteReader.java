@@ -1,11 +1,11 @@
 package ru.doom.wad.view.palette;
 
-import com.google.inject.Singleton;
+import org.springframework.stereotype.Component;
 
 import java.awt.image.ColorModel;
 import java.awt.image.IndexColorModel;
 
-@Singleton
+@Component
 public class PaletteReader {
 
 	public ColorModel readPalette(byte[] paletteFile, int num) {

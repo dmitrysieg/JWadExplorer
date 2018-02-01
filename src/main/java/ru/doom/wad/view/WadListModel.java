@@ -1,17 +1,17 @@
 package ru.doom.wad.view;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.doom.wad.logic.WadUtils;
 import ru.doom.wad.logic.Wad;
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
 
-@Singleton
+@Component
 public class WadListModel implements ListModel {
 
-	@Inject
+	@Autowired
 	private WadUtils wadUtils;
 
 	private Wad wad;

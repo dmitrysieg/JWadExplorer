@@ -1,7 +1,6 @@
 package ru.doom.wad.logic;
 
 import org.junit.Test;
-import ru.doom.wad.logic.IWadReader;
 
 import javax.swing.*;
 import java.io.File;

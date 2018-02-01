@@ -1,18 +1,16 @@
 package ru.doom.wad.logic.task;
 
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Provider;
-import com.google.inject.Singleton;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
-@Singleton
-public class TaskProvider implements Provider<OpenWadTask> {
+@Component
+public class TaskProvider {
 
-	@Inject
-	private Injector injector;
+	@Autowired
+	private ApplicationContext context;
 
-	@Override
 	public OpenWadTask get() {
-		return injector.getInstance(OpenWadTask.class);
+		return context.getBean(OpenWadTask.class);
 	}
 }

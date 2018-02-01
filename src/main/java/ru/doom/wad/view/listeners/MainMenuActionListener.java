@@ -1,7 +1,7 @@
 package ru.doom.wad.view.listeners;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.doom.wad.logic.task.TaskProvider;
 import ru.doom.wad.view.DialogManager;
 
@@ -10,12 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-@Singleton
+@Component
 public class MainMenuActionListener implements ActionListener {
 
-	@Inject
+	@Autowired
 	private DialogManager dialogManager;
-	@Inject
+	@Autowired
 	private TaskProvider taskProvider;
 
 	@Override

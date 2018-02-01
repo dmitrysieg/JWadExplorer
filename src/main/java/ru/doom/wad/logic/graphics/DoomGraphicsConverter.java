@@ -1,10 +1,10 @@
 package ru.doom.wad.logic.graphics;
 
-import com.google.inject.Singleton;
+import org.springframework.stereotype.Component;
 
 import java.awt.image.*;
 
-@Singleton
+@Component
 public class DoomGraphicsConverter {
 
 	public RenderedImage convertSprite(byte[] imageFile, ColorModel palette) throws GraphicsParsingException {

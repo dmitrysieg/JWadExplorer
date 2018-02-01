@@ -1,16 +1,16 @@
 package ru.doom.wad.view.listeners;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.doom.wad.view.Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-@Singleton
+@Component
 public class ToolbarActionListener implements ActionListener {
 
-	@Inject
+	@Autowired
 	private Controller controller;
 
 	@Override

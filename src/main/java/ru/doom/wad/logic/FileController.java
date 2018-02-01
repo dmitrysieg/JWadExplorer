@@ -1,6 +1,6 @@
 package ru.doom.wad.logic;
 
-import com.google.inject.Singleton;
+import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-@Singleton
+@Component
 public class FileController {
 
 	public void saveWadFile(File file, byte[] content) throws IOException {
