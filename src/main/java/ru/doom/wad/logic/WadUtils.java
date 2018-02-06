@@ -2,6 +2,7 @@ package ru.doom.wad.logic;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -30,6 +31,8 @@ public class WadUtils {
 		}
 	}
 
+	@Component
+	@Scope("prototype")
 	private static class NameMatcher implements Predicate<WadEntry> {
 
 		@Autowired
