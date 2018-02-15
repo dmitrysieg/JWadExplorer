@@ -2,6 +2,7 @@ package ru.doom.wad.view.listeners;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.doom.wad.logic.format.Format;
 import ru.doom.wad.logic.task.TaskProvider;
 import ru.doom.wad.view.DialogManager;
 
@@ -23,7 +24,7 @@ public class MainMenuActionListener implements ActionListener {
 		if (e.getSource() instanceof JMenuItem) {
 			if ("Open".equals(e.getActionCommand())) {
 				final File file = dialogManager.selectOpenFile();
-				new Thread(taskProvider.get().withFile(file)).start();
+				new Thread(taskProvider.get(Format.WAD).withFile(file)).start();
 			}
 		}		
 	}

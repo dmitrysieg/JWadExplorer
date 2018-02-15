@@ -2,7 +2,9 @@ package ru.doom.wad.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.doom.wad.logic.FileController;
-import ru.doom.wad.logic.Wad;
+import ru.doom.wad.logic.format.wad.Wad;
+import ru.doom.wad.logic.format.wad.WadCellRenderer;
+import ru.doom.wad.logic.format.wad.WadListModel;
 import ru.doom.wad.logic.graphics.DoomGraphicsConverter;
 import ru.doom.wad.logic.graphics.GraphicsParsingException;
 import ru.doom.wad.view.widget.ImagePanel;

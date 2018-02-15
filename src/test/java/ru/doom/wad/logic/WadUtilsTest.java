@@ -2,6 +2,7 @@ package ru.doom.wad.logic;
 
 import org.junit.Assert;
 import org.junit.Test;
+import ru.doom.wad.logic.format.wad.WadUtils;
 
 public class WadUtilsTest {
 
