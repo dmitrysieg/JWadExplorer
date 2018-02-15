@@ -1,6 +1,6 @@
 package ru.doom.wad.logic.format.wad;
 
-import ru.doom.wad.logic.LERandomAccessFile;
+import ru.doom.wad.logic.LeftEndRandomAccessFile;
 
 import javax.swing.*;
 import java.io.*;
@@ -17,21 +17,21 @@ public class IWadReader {
 
 	public Wad read(File file) throws IOException, IWadParseException {
 
-		LERandomAccessFile reader = new LERandomAccessFile(file, "r");
+		final LeftEndRandomAccessFile reader = new LeftEndRandomAccessFile(file, "r");
 		final Wad wad = new Wad();
 
 		checkSignature(reader);
 
-		final int numlumps = reader.readLEInt();
+		final int lumpCount = reader.readLEInt();
 		progressBar.setMinimum(0);
-		progressBar.setMaximum(numlumps);
+		progressBar.setMaximum(lumpCount);
 		progressBar.setValue(0);
 
 		final int diroffset = reader.readLEInt();
 		reader.seek(diroffset);
 
 		// read directory
-		for (int i = 0; i < numlumps; i++) {
+		for (int i = 0; i < lumpCount; i++) {
 			WadEntry wadEntry = new WadEntry();
 			wadEntry.setOffset(reader.readLEInt());
 			wadEntry.setSize(reader.readLEInt());
@@ -43,7 +43,7 @@ public class IWadReader {
 		}
 
 		// read files
-		for (int i = 0; i < numlumps; i++) {
+		for (int i = 0; i < lumpCount; i++) {
 			final WadEntry wadEntry = wad.get(i);
 			reader.seek(wadEntry.getOffset());
 			final byte[] content = new byte[wadEntry.getSize()];
@@ -56,8 +56,8 @@ public class IWadReader {
 		return wad;
 	}
 
-	private void checkSignature(LERandomAccessFile reader) throws IOException, IWadParseException {
-		int sign = reader.readLEInt();
+	private void checkSignature(final LeftEndRandomAccessFile reader) throws IOException, IWadParseException {
+		final int sign = reader.readLEInt();
 		if (sign != IWAD) {
 			throw new IWadParseException("Invalid signature");
 		}
