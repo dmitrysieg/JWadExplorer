@@ -2,6 +2,7 @@ package ru.doom.wad.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.doom.wad.logic.app.VersionHelper;
 import ru.doom.wad.view.listeners.Listeners;
 import ru.doom.wad.view.widget.ImagePanel;
 import ru.doom.wad.view.widget.PalettePanel;
@@ -15,14 +16,13 @@ import java.net.URL;
 @Component
 public class ViewManager {
 
-	@Autowired
-	private Listeners listeners;
-	@Autowired
-	private View view;
+	@Autowired private Listeners listeners;
+	@Autowired private View view;
+	@Autowired private VersionHelper versionHelper;
 
 	public JFrame createMainFrame() {
 		final JFrame mainFrame = new JFrame();
-		mainFrame.setTitle("WAD Explorer v.1.0");
+		mainFrame.setTitle(String.format("WAD Explorer %s", versionHelper.getVersion()));
 		mainFrame.setSize(860, 530);
 		mainFrame.setExtendedState(Frame.MAXIMIZED_BOTH);
 
