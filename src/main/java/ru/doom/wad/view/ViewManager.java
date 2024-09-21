@@ -20,7 +20,24 @@ public class ViewManager {
 	@Autowired private View view;
 	@Autowired private VersionHelper versionHelper;
 
+	public JFrame initMainFrame() {
+		final JFrame mainFrame = createMainFrame();
+
+		mainFrame.add(createToolBar());
+
+		final JTabbedPane tabbedPane = createTabbedPane();
+		mainFrame.add(tabbedPane);
+
+		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		mainFrame.setVisible(true);
+
+		view.setFrame(mainFrame);
+
+		return mainFrame;
+	}
+
 	public JFrame createMainFrame() {
+
 		final JFrame mainFrame = new JFrame();
 		mainFrame.setTitle(String.format("WAD Explorer %s", versionHelper.getVersion()));
 		mainFrame.setSize(860, 530);
@@ -28,29 +45,48 @@ public class ViewManager {
 
 		mainFrame.setJMenuBar(createMainMenu());
 
-		mainFrame.setLayout(new BorderLayout());
+		mainFrame.setLayout(new BoxLayout(mainFrame.getContentPane(), BoxLayout.PAGE_AXIS));
+		return mainFrame;
+	}
 
-		/* NORTH */
+	public JTabbedPane createTabbedPane() {
 
-		final JToolBar toolBar = createToolBar();
-		mainFrame.getContentPane().add(toolBar, BorderLayout.NORTH);
+		final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		view.setTabbedPane(tabbedPane);
+		return tabbedPane;
+	}
 
-		/* SOUTH */
+	public WorkspaceView addWorkspace(final JTabbedPane tabbedPane, final String filename) {
+
+		final WorkspaceView workspace = new WorkspaceView(new JPanel());
+
+		workspace.getPanel().add(createBottomPanel(workspace), BorderLayout.SOUTH);
+		workspace.getPanel().add(createLeftPanel(workspace), BorderLayout.WEST);
+		workspace.getPanel().add(createRightPanel(workspace), BorderLayout.EAST);
+		workspace.getPanel().add(createCenterPanel(workspace), BorderLayout.CENTER);
+
+		view.getTabbedPane().addTab(filename, workspace.getPanel());
+		return workspace;
+	}
+
+	public JPanel createBottomPanel(final WorkspaceView workspace) {
 
 		final JPanel southPanel = new JPanel();
 		southPanel.setLayout(new CardLayout());
-		view.setStatusPanel(southPanel);
+		workspace.setStatusPanel(southPanel);
 
 		final JProgressBar progressBar = createProgressBar();
-		view.setProgressBar(progressBar);
+		workspace.setProgressBar(progressBar);
 		southPanel.add(progressBar, Controller.SOUTH_PROGRESS);
+
 		final JLabel statusLabel = new JLabel();
-		view.setStatusLabel(statusLabel);
+		workspace.setStatusLabel(statusLabel);
 		southPanel.add(statusLabel, Controller.SOUTH_STATUS);
 
-		mainFrame.getContentPane().add(southPanel, BorderLayout.SOUTH);
+		return southPanel;
+	}
 
-		/* WEST */
+	public JPanel createLeftPanel(final WorkspaceView workspace) {
 
 		final JPanel westPanel = new JPanel();
 		westPanel.setLayout(new BoxLayout(westPanel, BoxLayout.Y_AXIS));
@@ -58,19 +94,20 @@ public class ViewManager {
 		final JTextField quickSearch = new JTextField();
 		quickSearch.setMaximumSize(new Dimension(Integer.MAX_VALUE, 16));
 		quickSearch.addKeyListener(listeners.getQuickSearchActionListener());
-		view.setQuickSearch(quickSearch);
+		workspace.setQuickSearch(quickSearch);
 		westPanel.add(quickSearch);
 
-		view.setList(createList());
-		final JScrollPane listPane = new JScrollPane(view.getList());
+		workspace.setList(createList(workspace));
+		final JScrollPane listPane = new JScrollPane(workspace.getList());
 		listPane.setPreferredSize(new Dimension(200, 0));
 		listPane.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		view.setListPane(listPane);
+		workspace.setListPane(listPane);
 		westPanel.add(listPane);
 
-		mainFrame.getContentPane().add(westPanel, BorderLayout.WEST);
+		return westPanel;
+	}
 
-		/* EAST */
+	public JPanel createRightPanel(final WorkspaceView workspace) {
 
 		final JPanel eastPanel = new JPanel();
 		eastPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -79,32 +116,26 @@ public class ViewManager {
 		final PalettePanel palettePanel = new PalettePanel();
 		palettePanel.init();
 		palettePanel.setPreferredSize(new Dimension(200, 0));
-		view.setPalettePanel(palettePanel);
+		workspace.setPalettePanel(palettePanel);
 
 		final JToolBar paletteToolbar = new JToolBar(SwingConstants.VERTICAL);
 		paletteToolbar.setPreferredSize(new Dimension(200, 200));
 		paletteToolbar.add(palettePanel);
 		eastPanel.add(paletteToolbar);
 
-		mainFrame.getContentPane().add(eastPanel, BorderLayout.EAST);
+		return eastPanel;
+	}
 
-		/* CENTER */
+	public JPanel createCenterPanel(final WorkspaceView workspace) {
 
 		final JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(new CardLayout(10, 10));
 
 		final ImagePanel imagePanel = new ImagePanel();
-		view.setImagePanel(imagePanel);
+		workspace.setImagePanel(imagePanel);
 
 		centerPanel.add(imagePanel, "PREVIEW");
-
-		mainFrame.getContentPane().add(centerPanel, BorderLayout.CENTER);
-
-		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		mainFrame.setVisible(true);
-
-		view.setFrame(mainFrame);
-		return mainFrame;
+		return centerPanel;
 	}
 
 	public JMenuBar createMainMenu() {
@@ -134,13 +165,13 @@ public class ViewManager {
 		return progressBar;
 	}
 
-	public JList createList() {
-		final JList list = new JList();
+	public JList<String> createList(final WorkspaceView workspace) {
+		final JList<String> list = new JList<>();
 		list.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 
 		final JPopupMenu wadListMenu = createWadListMenu();
 		wadListMenu.setInvoker(list);
-		view.setWadListMenu(wadListMenu);
+		workspace.setWadListMenu(wadListMenu);
 		list.addMouseListener(listeners.getWadListMouseListener());
 
 		return list;
@@ -156,8 +187,10 @@ public class ViewManager {
 		return wadListMenu;
 	}
 
-	private JToolBar createToolBar() {
+	private JPanel createToolBar() {
 		final JToolBar toolBar = new JToolBar(SwingConstants.HORIZONTAL);
+		toolBar.setFloatable(false);
+		toolBar.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
 		final URL urlSave = this.getClass().getResource("icon-save.png");
 		final Icon iconSave = new ImageIcon(urlSave, "Save image");
@@ -170,6 +203,11 @@ public class ViewManager {
 		view.setSaveImageButton(btnSave);
 
 		toolBar.add(btnSave);
-		return toolBar;
+
+		final JPanel toolBarFrame = new JPanel();
+		toolBarFrame.setLayout(new BoxLayout(toolBarFrame, BoxLayout.LINE_AXIS));
+		toolBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, toolBar.getPreferredSize().height));
+		toolBarFrame.add(toolBar);
+		return toolBarFrame;
 	}
 }

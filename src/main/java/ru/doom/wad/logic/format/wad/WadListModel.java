@@ -7,7 +7,7 @@ import javax.swing.*;
 import javax.swing.event.ListDataListener;
 
 @Component
-public class WadListModel implements ListModel {
+public class WadListModel implements ListModel<String> {
 
 	@Autowired
 	private WadUtils wadUtils;
@@ -30,7 +30,7 @@ public class WadListModel implements ListModel {
 	}
 
 	@Override
-	public Object getElementAt(int index) {
+	public String getElementAt(int index) {
 		checkWad();
 		return wadUtils.trimNull(new String(wad.get(index).getName()));
 	}

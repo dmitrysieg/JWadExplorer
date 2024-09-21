@@ -11,6 +11,6 @@ public class App {
 	public static void main(String[] args) {
 
 		final ApplicationContext context = new AnnotationConfigApplicationContext("ru.doom.wad");
-		SwingUtilities.invokeLater(() -> context.getBean(ViewManager.class).createMainFrame());
+		SwingUtilities.invokeLater(() -> context.getBean(ViewManager.class).initMainFrame());
 	}
 }

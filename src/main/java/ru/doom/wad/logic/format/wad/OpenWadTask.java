@@ -26,9 +26,12 @@ public class OpenWadTask extends LoadFileTask {
 
 	@Override
 	public void load(final File file) throws Exception {
+		controller.addEditorTab(file.getAbsolutePath(), file.getName());
 		controller.showProgress();
-		final Wad wad = new IWadReader(view.getProgressBar()).read(file);
+
+		final Wad wad = new IWadReader(view.getCurrentWorkspace().getProgressBar()).read(file);
 		controller.setCurrentWad(wad);
+
 		final WadEntry wadEntry = wadUtils.findByName(wad, "PLAYPAL").orElseThrow(() -> new Exception("Empty"));
 		final ColorModel palette = paletteReader.readPalette(wadEntry.getContent(), 0);
 		controller.processOnLoadWad(palette);
