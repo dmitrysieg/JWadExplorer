@@ -192,22 +192,36 @@ public class ViewManager {
 		toolBar.setFloatable(false);
 		toolBar.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
-		final URL urlSave = this.getClass().getResource("icon-save.png");
-		final Icon iconSave = new ImageIcon(urlSave, "Save image");
-		final JButton btnSave = new JButton(iconSave);
-		btnSave.setBorder(BorderFactory.createEmptyBorder());
-		btnSave.setActionCommand("Save image");
-		btnSave.addActionListener(listeners.getToolbarActionListener());
-		btnSave.setToolTipText("Save image");
-		btnSave.setEnabled(false);
-		view.setSaveImageButton(btnSave);
+		JButton btnSaveFile = createToolbarButton("icon-save.png", "Save file");
+		toolBar.add(btnSaveFile);
+		view.setSaveFileButton(btnSaveFile);
 
-		toolBar.add(btnSave);
+		JButton btnSaveImage = createToolbarButton("icon-image.png", "Save image");
+		toolBar.add(btnSaveImage);
+		view.setSaveImageButton(btnSaveImage);
 
 		final JPanel toolBarFrame = new JPanel();
 		toolBarFrame.setLayout(new BoxLayout(toolBarFrame, BoxLayout.LINE_AXIS));
 		toolBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, toolBar.getPreferredSize().height));
 		toolBarFrame.add(toolBar);
 		return toolBarFrame;
+	}
+
+	private JButton createToolbarButton(final String imgName, final String cmdName) {
+		final URL urlSave = this.getClass().getResource(imgName);
+		final Icon iconSave = new ImageIcon(urlSave, cmdName);
+		final JButton btnSave = new JButton(iconSave);
+
+		btnSave.setOpaque(true);
+		btnSave.setContentAreaFilled(false);
+		btnSave.setBorderPainted(false);
+
+		btnSave.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
+		btnSave.setActionCommand(cmdName);
+		btnSave.addActionListener(listeners.getToolbarActionListener());
+		btnSave.setToolTipText(cmdName);
+		btnSave.setEnabled(false);
+
+		return btnSave;
 	}
 }

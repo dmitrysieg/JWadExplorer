@@ -13,21 +13,38 @@ public class WadListMouseListener implements MouseListener {
 	@Autowired
 	private Controller controller;
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
+	private void adjustSelection(MouseEvent e) {
+		// adjust list selection on right button
+		// because of ignoring right button by standard behavior
+		if (e.getButton() == MouseEvent.BUTTON3) {
+			controller.adjustListSelection(e);
+		}
+	}
+
+	private void reactOnSelection(MouseEvent e) {
+		// Always react on click
+		if (e.getButton() == MouseEvent.BUTTON1 || e.getButton() == MouseEvent.BUTTON3) {
+			controller.showCurrentResource();
+		}
+
+		// Need to show menu
 		if (e.getButton() == MouseEvent.BUTTON3) {
 			controller.controlWadListMenu(e.getComponent(), e.getX(), e.getY());
-		} else if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
-			controller.showCurrentResource();
 		}
 	}
 
 	@Override
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	@Override
 	public void mousePressed(MouseEvent e) {
+		adjustSelection(e);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		reactOnSelection(e);
 	}
 
 	@Override

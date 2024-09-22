@@ -9,6 +9,7 @@ public class EditorTab {
 
     private Wad currentWad;
     ColorModel palette;
+    private int currentEntry;
     private RenderedImage currentImage;
 
     public Wad getCurrentWad() {
@@ -25,6 +26,14 @@ public class EditorTab {
 
     public void setPalette(ColorModel palette) {
         this.palette = palette;
+    }
+
+    public int getCurrentEntry() {
+        return currentEntry;
+    }
+
+    public void setCurrentEntry(int currentEntry) {
+        this.currentEntry = currentEntry;
     }
 
     public RenderedImage getCurrentImage() {

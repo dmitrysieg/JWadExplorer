@@ -13,8 +13,11 @@ import ru.doom.wad.view.widget.ImagePanel;
 import javax.swing.*;
 import java.awt.CardLayout;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
 import java.awt.image.ColorModel;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +27,7 @@ public class Controller {
 	public static final String SOUTH_PROGRESS = "PROGRESS";
 	public static final String SOUTH_STATUS = "STATUS";
 
+	private boolean isAllowedSaveFile;
 	private boolean isAllowedSaveImage;
 
 	@Autowired
@@ -90,9 +94,34 @@ public class Controller {
 		}
 	}
 
+	public void adjustListSelection(MouseEvent e) {
+		Object ui = view.getCurrentWorkspace().getList().getUI();
+		try {
+			Method getHandler = ui.getClass().getDeclaredMethod("getHandler");
+			getHandler.setAccessible(true);
+			Object handler = getHandler.invoke(ui);
+
+			Method adjustSelection = handler.getClass().getDeclaredMethod("adjustSelection", MouseEvent.class);
+			adjustSelection.setAccessible(true);
+			adjustSelection.invoke(handler, e);
+		} catch (NoSuchMethodException noSuchMethodException) {
+			// ignore
+		} catch (InvocationTargetException invocationTargetException) {
+			// ignore
+		} catch (IllegalAccessException illegalAccessException) {
+			// ignore
+		}
+	}
+
 	public void showCurrentResource() {
+
 		final JList<String> list = view.getCurrentWorkspace().getList();
+
 		if (list.getSelectedIndex() >= 0) {
+
+			allowSaveFile(true);
+			currentTab.setCurrentEntry(list.getSelectedIndex());
+
 			final ColorModel palette = currentTab.getPalette();
 			if (palette != null) {
 				final byte[] imageFile = this.currentTab.getCurrentWad().get(list.getSelectedIndex()).getContent();
@@ -127,9 +156,18 @@ public class Controller {
 		dialogManager.showErrorMessageDialog(header, message);
 	}
 
+	public void allowSaveFile(boolean allowed) {
+		isAllowedSaveFile = allowed;
+		view.getSaveFileButton().setEnabled(allowed);
+	}
+
 	public void allowSaveImage(boolean allowed) {
 		isAllowedSaveImage = allowed;
 		view.getSaveImageButton().setEnabled(allowed);
+	}
+
+	public boolean isAllowedSaveFile() {
+		return isAllowedSaveFile;
 	}
 
 	public boolean isAllowedSaveImage() {

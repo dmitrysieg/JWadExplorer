@@ -15,7 +15,9 @@ public class ToolbarActionListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if ("Save image".equals(e.getActionCommand()) && controller.isAllowedSaveImage()) {
+		if ("Save file".equals(e.getActionCommand()) && controller.isAllowedSaveFile()) {
+			controller.controlSaveWadFile();
+		} else if ("Save image".equals(e.getActionCommand()) && controller.isAllowedSaveImage()) {
 			controller.saveCurrentImage();
 		}
 	}

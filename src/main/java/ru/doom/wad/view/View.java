@@ -12,6 +12,7 @@ public class View {
 
 	private WorkspaceView currentWorkspace;
 
+	private JButton saveFileButton;
 	private JButton saveImageButton;
 
 	/* */
@@ -38,6 +39,14 @@ public class View {
 
 	public void setCurrentWorkspace(WorkspaceView currentWorkspace) {
 		this.currentWorkspace = currentWorkspace;
+	}
+
+	public JButton getSaveFileButton() {
+		return saveFileButton;
+	}
+
+	public void setSaveFileButton(JButton saveFileButton) {
+		this.saveFileButton = saveFileButton;
 	}
 
 	public JButton getSaveImageButton() {
