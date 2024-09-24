@@ -7,10 +7,34 @@ import java.awt.image.RenderedImage;
 
 public class EditorTab {
 
+    private WorkspaceView workspaceView;
+    private String absolutePath;
+
     private Wad currentWad;
     ColorModel palette;
     private int currentEntry;
     private RenderedImage currentImage;
+
+    public EditorTab(WorkspaceView workspaceView, String absolutePath) {
+        this.workspaceView = workspaceView;
+        this.absolutePath = absolutePath;
+    }
+
+    public String getAbsolutePath() {
+        return absolutePath;
+    }
+
+    public void setAbsolutePath(String absolutePath) {
+        this.absolutePath = absolutePath;
+    }
+
+    public WorkspaceView getWorkspaceView() {
+        return workspaceView;
+    }
+
+    public void setWorkspaceView(WorkspaceView workspaceView) {
+        this.workspaceView = workspaceView;
+    }
 
     public Wad getCurrentWad() {
         return currentWad;

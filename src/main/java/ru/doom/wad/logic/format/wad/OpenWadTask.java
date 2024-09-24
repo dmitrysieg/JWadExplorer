@@ -39,6 +39,7 @@ public class OpenWadTask extends LoadFileTask {
 
 	@Override
 	public void onError(Throwable e) {
+		controller.removeEditorTab(controller.getCurrentTab().getAbsolutePath());
 		controller.showError("Error opening WAD file", e.getLocalizedMessage());
 	}
 }

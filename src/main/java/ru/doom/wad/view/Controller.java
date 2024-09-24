@@ -47,10 +47,21 @@ public class Controller {
 	private EditorTab currentTab;
 
 	public void addEditorTab(final String absolutePath, final String filename) {
-		view.setCurrentWorkspace(viewManager.addWorkspace(view.getTabbedPane(), filename));
 
-		currentTab = new EditorTab();
+		final WorkspaceView workspaceView = viewManager.addWorkspace(view.getTabbedPane(), filename);
+		view.setCurrentWorkspace(workspaceView);
+
+		currentTab = new EditorTab(workspaceView, absolutePath);
 		tabs.put(absolutePath, currentTab);
+	}
+
+	public EditorTab getCurrentTab() {
+		return currentTab;
+	}
+	
+	public void removeEditorTab(final String absolutePath) {
+		viewManager.removeWorkspace(tabs.get(absolutePath));
+		tabs.remove(absolutePath);
 	}
 
 	public void processQuickSearch() {

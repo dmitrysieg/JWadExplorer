@@ -69,6 +69,10 @@ public class ViewManager {
 		return workspace;
 	}
 
+	public void removeWorkspace(final EditorTab editorTab) {
+		view.getTabbedPane().remove(editorTab.getWorkspaceView().getPanel());
+	}
+
 	public JPanel createBottomPanel(final WorkspaceView workspace) {
 
 		final JPanel southPanel = new JPanel();
