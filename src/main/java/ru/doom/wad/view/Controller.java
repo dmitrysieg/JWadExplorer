@@ -10,7 +10,7 @@ import ru.doom.wad.logic.graphics.DoomGraphicsConverter;
 import ru.doom.wad.logic.graphics.GraphicsParsingException;
 import ru.doom.wad.view.widget.ImagePanel;
 
-import javax.swing.*;
+import javax.swing.JList;
 import java.awt.CardLayout;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
@@ -80,8 +80,10 @@ public class Controller {
 
 		this.currentTab.setPalette(palette);
 
-		view.getCurrentWorkspace().getPalettePanel().setPalette(palette);
-		view.getCurrentWorkspace().getPalettePanel().repaint();
+		if (palette != null) {
+			view.getCurrentWorkspace().getPalettePanel().setPalette(palette);
+			view.getCurrentWorkspace().getPalettePanel().repaint();
+		}
 		view.getCurrentWorkspace().getList().setCellRenderer(new WadCellRenderer().wad(this.currentTab.getCurrentWad()));
 		view.getCurrentWorkspace().getList().setModel(wadListModel.withWad(this.currentTab.getCurrentWad()));
 		view.getCurrentWorkspace().getListPane().doLayout();

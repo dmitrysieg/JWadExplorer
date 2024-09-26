@@ -2,12 +2,14 @@ package ru.doom.wad.logic.format.wad;
 
 import ru.doom.wad.logic.LeftEndRandomAccessFile;
 
-import javax.swing.*;
-import java.io.*;
+import javax.swing.JProgressBar;
+import java.io.File;
+import java.io.IOException;
 
 public class IWadReader {
 
-	private static final int IWAD = 1145132873;
+	private static final String IWAD = "IWAD";
+	private static final String PWAD = "PWAD";
 
 	private final JProgressBar progressBar;
 
@@ -57,8 +59,8 @@ public class IWadReader {
 	}
 
 	private void checkSignature(final LeftEndRandomAccessFile reader) throws IOException, IWadParseException {
-		final int sign = reader.readLEInt();
-		if (sign != IWAD) {
+		final String signature = reader.readString4();
+		if (!IWAD.equals(signature) && !PWAD.equals(signature)) {
 			throw new IWadParseException("Invalid signature");
 		}
 	}
