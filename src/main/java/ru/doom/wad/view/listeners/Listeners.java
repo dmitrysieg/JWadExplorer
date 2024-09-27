@@ -16,6 +16,8 @@ public class Listeners {
 	private PopupMenuListener popupMenuListener;
 	@Autowired
 	private ToolbarActionListener toolbarActionListener;
+	@Autowired
+	private TabCloseListener tabCloseListener;
 
 	public MainMenuActionListener getMainMenuActionListener() {
 		return mainMenuActionListener;
@@ -35,5 +37,9 @@ public class Listeners {
 
 	public ToolbarActionListener getToolbarActionListener() {
 		return toolbarActionListener;
+	}
+
+	public TabCloseListener getTabCloseListener() {
+		return tabCloseListener;
 	}
 }

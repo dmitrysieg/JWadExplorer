@@ -11,6 +11,7 @@ import ru.doom.wad.logic.graphics.GraphicsParsingException;
 import ru.doom.wad.view.widget.ImagePanel;
 
 import javax.swing.JList;
+import javax.swing.JPanel;
 import java.awt.CardLayout;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
@@ -43,7 +44,7 @@ public class Controller {
 	@Autowired
 	private DoomGraphicsConverter doomGraphicsConverter;
 
-	private Map<String, EditorTab> tabs = new HashMap<>();
+	private final Map<String, EditorTab> tabs = new HashMap<>();
 	private EditorTab currentTab;
 
 	public void addEditorTab(final String absolutePath, final String filename) {
@@ -58,7 +59,15 @@ public class Controller {
 	public EditorTab getCurrentTab() {
 		return currentTab;
 	}
-	
+
+	public EditorTab findEditorTab(final JPanel tabPanel) {
+		return tabs.values()
+				.stream()
+				.filter(editorTab -> editorTab.getWorkspaceView().getPanel().equals(tabPanel))
+				.findFirst()
+				.orElseThrow(() -> new IllegalStateException("No tab corresponding to panel"));
+	}
+
 	public void removeEditorTab(final String absolutePath) {
 		viewManager.removeWorkspace(tabs.get(absolutePath));
 		tabs.remove(absolutePath);

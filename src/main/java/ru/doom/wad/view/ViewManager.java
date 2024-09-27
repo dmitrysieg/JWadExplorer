@@ -66,8 +66,39 @@ public class ViewManager {
 		workspace.getPanel().add(createCenterPanel(workspace), BorderLayout.CENTER);
 
 		tabbedPane.addTab(filename, workspace.getPanel());
+		addTabRenderer(tabbedPane, workspace.getPanel(), filename);
+
 		tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
 		return workspace;
+	}
+
+	public void addTabRenderer(final JTabbedPane tabbedPane, final JPanel component, final String title) {
+		final JPanel tabRenderer = new JPanel(new FlowLayout());
+		tabRenderer.setOpaque(false);
+		JLabel lblTitle = new JLabel(title);
+
+		final URL urlSave = this.getClass().getResource("icon-close.png");
+		final Icon iconClose = urlSave == null ? null : new ImageIcon(urlSave);
+		JButton btnClose = new JButton(iconClose);
+		btnClose.setBorder(BorderFactory.createEmptyBorder());
+		btnClose.setBorderPainted(false);
+		btnClose.setFocusPainted(false);
+		btnClose.setContentAreaFilled(false);
+		btnClose.setPreferredSize(new Dimension(16, 16));
+		btnClose.setMargin(new Insets(0, 0, 0, 0));
+
+		btnClose.addActionListener(listeners.getTabCloseListener());
+
+		tabRenderer.add(lblTitle);
+		tabRenderer.add(btnClose);
+
+		final int index = tabbedPane.indexOfComponent(component);
+		tabbedPane.setTabComponentAt(index, tabRenderer);
+	}
+
+	public JPanel findTabPanel(final java.awt.Component tabComponent) {
+		final int index = view.getTabbedPane().indexOfTabComponent(tabComponent);
+		return index < 0 ? null : (JPanel) view.getTabbedPane().getComponentAt(index);
 	}
 
 	public void removeWorkspace(final EditorTab editorTab) {
