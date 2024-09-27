@@ -65,7 +65,8 @@ public class ViewManager {
 		workspace.getPanel().add(createRightPanel(workspace), BorderLayout.EAST);
 		workspace.getPanel().add(createCenterPanel(workspace), BorderLayout.CENTER);
 
-		view.getTabbedPane().addTab(filename, workspace.getPanel());
+		tabbedPane.addTab(filename, workspace.getPanel());
+		tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
 		return workspace;
 	}
 
