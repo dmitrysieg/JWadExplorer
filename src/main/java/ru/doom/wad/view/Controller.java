@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.doom.wad.logic.FileController;
 import ru.doom.wad.logic.format.wad.Wad;
 import ru.doom.wad.logic.format.wad.WadCellRenderer;
-import ru.doom.wad.logic.format.wad.WadListModel;
+import ru.doom.wad.logic.format.wad.WadListModelFactory;
 import ru.doom.wad.logic.graphics.DoomGraphicsConverter;
 import ru.doom.wad.logic.graphics.GraphicsParsingException;
 import ru.doom.wad.view.widget.ImagePanel;
@@ -38,7 +38,7 @@ public class Controller {
 	@Autowired
 	private DialogManager dialogManager;
 	@Autowired
-	private WadListModel wadListModel;
+	private WadListModelFactory wadListModelFactory;
 	@Autowired
 	private FileController fileController;
 	@Autowired
@@ -46,14 +46,26 @@ public class Controller {
 
 	private final Map<String, EditorTab> tabs = new HashMap<>();
 	private EditorTab currentTab;
+	private boolean tabBeingCreated;
 
 	public void addEditorTab(final String absolutePath, final String filename) {
+		tabBeingCreated = true;
 
 		final WorkspaceView workspaceView = viewManager.addWorkspace(view.getTabbedPane(), filename);
 		view.setCurrentWorkspace(workspaceView);
 
 		currentTab = new EditorTab(workspaceView, absolutePath);
 		tabs.put(absolutePath, currentTab);
+
+		tabBeingCreated = false;
+	}
+
+	public void changeTab(final int index) {
+		final JPanel panel = (JPanel) view.getTabbedPane().getComponentAt(index);
+		final EditorTab tab = findEditorTab(panel);
+
+		view.setCurrentWorkspace(tab.getWorkspaceView());
+		currentTab = tab;
 	}
 
 	public EditorTab getCurrentTab() {
@@ -90,12 +102,28 @@ public class Controller {
 		this.currentTab.setPalette(palette);
 
 		if (palette != null) {
+			viewManager.createPalettePanel(view.getCurrentWorkspace());
 			view.getCurrentWorkspace().getPalettePanel().setPalette(palette);
-			view.getCurrentWorkspace().getPalettePanel().repaint();
+		} else {
+			viewManager.createPaletteLoader(view.getCurrentWorkspace());
+			adjustAnyPaletteExist();
 		}
+
+		view.getCurrentWorkspace().getPanel().revalidate();
+		view.getCurrentWorkspace().getPanel().repaint();
+
 		view.getCurrentWorkspace().getList().setCellRenderer(new WadCellRenderer().wad(this.currentTab.getCurrentWad()));
-		view.getCurrentWorkspace().getList().setModel(wadListModel.withWad(this.currentTab.getCurrentWad()));
+		view.getCurrentWorkspace().getList().setModel(wadListModelFactory.withWad(this.currentTab.getCurrentWad()));
 		view.getCurrentWorkspace().getListPane().doLayout();
+	}
+
+	public void adjustAnyPaletteExist() {
+		final boolean showButton = tabs.values()
+				.stream()
+				.anyMatch(tab -> tab.palette != null);
+		if (view.getCurrentWorkspace().getPaletteLoader() != null) {
+			view.getCurrentWorkspace().getPaletteLoader().getButton().setEnabled(showButton);
+		}
 	}
 
 	public void controlWadListMenu(java.awt.Component invoker, int x, int y) {
@@ -209,5 +237,9 @@ public class Controller {
 		} catch (Exception e) {
 			dialogManager.showErrorMessageDialog("Error saving file", e.getLocalizedMessage());
 		}
+	}
+
+	public boolean isTabBeingCreated() {
+		return tabBeingCreated;
 	}
 }

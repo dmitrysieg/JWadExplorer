@@ -51,4 +51,11 @@ public class DialogManager {
 	public void showErrorMessageDialog(String header, String message) {
 		JOptionPane.showMessageDialog(view.getFrame(), message, header, JOptionPane.ERROR_MESSAGE);
 	}
+
+	public void showPaletteLoaderDialog() {
+		final JDialog dialog = new JDialog(view.getFrame(), "Choose palette from...");
+		dialog.add(new JLabel("asdasda"));
+		dialog.setLocationRelativeTo(view.getFrame());
+		dialog.setVisible(true);
+	}
 }

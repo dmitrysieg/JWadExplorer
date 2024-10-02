@@ -6,18 +6,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class Listeners {
 
-	@Autowired
-	private MainMenuActionListener mainMenuActionListener;
-	@Autowired
-	private QuickSearchActionListener quickSearchActionListener;
-	@Autowired
-	private WadListMouseListener wadListMouseListener;
-	@Autowired
-	private PopupMenuListener popupMenuListener;
-	@Autowired
-	private ToolbarActionListener toolbarActionListener;
-	@Autowired
-	private TabCloseListener tabCloseListener;
+	@Autowired private MainMenuActionListener mainMenuActionListener;
+	@Autowired private QuickSearchActionListener quickSearchActionListener;
+	@Autowired private WadListMouseListener wadListMouseListener;
+	@Autowired private PopupMenuListener popupMenuListener;
+	@Autowired private ToolbarActionListener toolbarActionListener;
+	@Autowired private TabCloseListener tabCloseListener;
+	@Autowired private TabChangeListener tabChangeListener;
 
 	public MainMenuActionListener getMainMenuActionListener() {
 		return mainMenuActionListener;
@@ -41,5 +36,9 @@ public class Listeners {
 
 	public TabCloseListener getTabCloseListener() {
 		return tabCloseListener;
+	}
+
+	public TabChangeListener getTabChangeListener() {
+		return tabChangeListener;
 	}
 }

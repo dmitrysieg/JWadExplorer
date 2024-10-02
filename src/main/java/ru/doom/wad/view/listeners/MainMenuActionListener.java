@@ -24,7 +24,7 @@ public class MainMenuActionListener implements ActionListener {
 		if (e.getSource() instanceof JMenuItem) {
 			if ("Open".equals(e.getActionCommand())) {
 				final File file = dialogManager.selectOpenFile();
-				new Thread(taskProvider.get(Format.WAD).withFile(file)).start();
+				SwingUtilities.invokeLater(taskProvider.get(Format.WAD).withFile(file));
 			}
 		}		
 	}

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.doom.wad.logic.app.VersionHelper;
 import ru.doom.wad.view.listeners.Listeners;
 import ru.doom.wad.view.widget.ImagePanel;
+import ru.doom.wad.view.widget.PaletteLoaderFactory;
 import ru.doom.wad.view.widget.PalettePanel;
 
 import javax.swing.*;
@@ -19,6 +20,7 @@ public class ViewManager {
 	@Autowired private Listeners listeners;
 	@Autowired private View view;
 	@Autowired private VersionHelper versionHelper;
+	@Autowired private PaletteLoaderFactory paletteLoaderFactory;
 
 	public JFrame initMainFrame() {
 		final JFrame mainFrame = createMainFrame();
@@ -67,6 +69,8 @@ public class ViewManager {
 
 		tabbedPane.addTab(filename, workspace.getPanel());
 		addTabRenderer(tabbedPane, workspace.getPanel(), filename);
+
+		tabbedPane.addChangeListener(listeners.getTabChangeListener());
 
 		tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
 		return workspace;
@@ -149,17 +153,28 @@ public class ViewManager {
 		eastPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		eastPanel.setLayout(new BoxLayout(eastPanel, BoxLayout.Y_AXIS));
 
+		final JToolBar paletteToolbar = new JToolBar(SwingConstants.VERTICAL);
+		paletteToolbar.setPreferredSize(new Dimension(200, 200));
+		workspace.setPaletteToolbar(paletteToolbar);
+
+		eastPanel.add(paletteToolbar);
+
+		return eastPanel;
+	}
+
+	public void createPaletteLoader(final WorkspaceView workspace) {
+		workspace.setPaletteLoader(paletteLoaderFactory.getPaletteLoader());
+		workspace.getPaletteToolbar().add(workspace.getPaletteLoader().getPane());
+	}
+
+	public void createPalettePanel(final WorkspaceView workspace) {
 		final PalettePanel palettePanel = new PalettePanel();
 		palettePanel.init();
 		palettePanel.setPreferredSize(new Dimension(200, 0));
 		workspace.setPalettePanel(palettePanel);
 
-		final JToolBar paletteToolbar = new JToolBar(SwingConstants.VERTICAL);
-		paletteToolbar.setPreferredSize(new Dimension(200, 200));
-		paletteToolbar.add(palettePanel);
-		eastPanel.add(paletteToolbar);
-
-		return eastPanel;
+		workspace.getPaletteToolbar().add(palettePanel);
+		workspace.getPaletteToolbar().revalidate();
 	}
 
 	public JPanel createCenterPanel(final WorkspaceView workspace) {
