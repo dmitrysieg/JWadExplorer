@@ -6,23 +6,15 @@ import org.springframework.stereotype.Component;
 import ru.doom.wad.logic.task.LoadFileTask;
 import ru.doom.wad.view.Controller;
 import ru.doom.wad.view.View;
-import ru.doom.wad.view.palette.PaletteReader;
 
-import java.awt.image.ColorModel;
 import java.io.File;
 
 @Component
 @Scope("prototype")
 public class OpenWadTask extends LoadFileTask {
 
-	@Autowired
-	private Controller controller;
-	@Autowired
-	private View view;
-	@Autowired
-	private PaletteReader paletteReader;
-	@Autowired
-	private WadUtils wadUtils;
+	@Autowired private Controller controller;
+	@Autowired private View view;
 
 	@Override
 	public void load(final File file) throws Exception {
@@ -31,11 +23,7 @@ public class OpenWadTask extends LoadFileTask {
 
 		final Wad wad = new IWadReader(view.getCurrentWorkspace().getProgressBar()).read(file);
 		controller.setCurrentWad(wad);
-
-		final ColorModel palette = wadUtils.findByName(wad, "PLAYPAL").map(
-				wadEntry -> paletteReader.readPalette(wadEntry.getContent(), 0)
-		).orElse(null);
-		controller.processOnLoadWad(palette);
+		controller.processOnLoadWad(controller.readPalette(wad));
 	}
 
 	@Override

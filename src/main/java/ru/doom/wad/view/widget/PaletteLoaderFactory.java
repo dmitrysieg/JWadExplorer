@@ -2,18 +2,23 @@ package ru.doom.wad.view.widget;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.doom.wad.view.Controller;
 import ru.doom.wad.view.DialogManager;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @Component
 public class PaletteLoaderFactory {
 
-    @Autowired
-    private DialogManager dialogManager;
+    @Autowired private Controller controller;
+    @Autowired private DialogManager dialogManager;
 
     public PaletteLoader getPaletteLoader() {
         return new PaletteLoader();
@@ -50,7 +55,7 @@ public class PaletteLoaderFactory {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            dialogManager.showPaletteLoaderDialog();
+            dialogManager.showPaletteLoaderDialog(controller.getPaletteTabList());
         }
     }
 }

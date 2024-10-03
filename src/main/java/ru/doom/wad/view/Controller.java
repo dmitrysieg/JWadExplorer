@@ -6,12 +6,15 @@ import ru.doom.wad.logic.FileController;
 import ru.doom.wad.logic.format.wad.Wad;
 import ru.doom.wad.logic.format.wad.WadCellRenderer;
 import ru.doom.wad.logic.format.wad.WadListModelFactory;
+import ru.doom.wad.logic.format.wad.WadUtils;
 import ru.doom.wad.logic.graphics.DoomGraphicsConverter;
 import ru.doom.wad.logic.graphics.GraphicsParsingException;
+import ru.doom.wad.view.palette.PaletteReader;
 import ru.doom.wad.view.widget.ImagePanel;
 
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import java.awt.CardLayout;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
@@ -20,7 +23,9 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class Controller {
@@ -31,18 +36,14 @@ public class Controller {
 	private boolean isAllowedSaveFile;
 	private boolean isAllowedSaveImage;
 
-	@Autowired
-	private View view;
-	@Autowired
-	private ViewManager viewManager;
-	@Autowired
-	private DialogManager dialogManager;
-	@Autowired
-	private WadListModelFactory wadListModelFactory;
-	@Autowired
-	private FileController fileController;
-	@Autowired
-	private DoomGraphicsConverter doomGraphicsConverter;
+	@Autowired private View view;
+	@Autowired private ViewManager viewManager;
+	@Autowired private DialogManager dialogManager;
+	@Autowired private WadListModelFactory wadListModelFactory;
+	@Autowired private WadUtils wadUtils;
+	@Autowired private PaletteReader paletteReader;
+	@Autowired private FileController fileController;
+	@Autowired private DoomGraphicsConverter doomGraphicsConverter;
 
 	private final Map<String, EditorTab> tabs = new HashMap<>();
 	private EditorTab currentTab;
@@ -54,7 +55,7 @@ public class Controller {
 		final WorkspaceView workspaceView = viewManager.addWorkspace(view.getTabbedPane(), filename);
 		view.setCurrentWorkspace(workspaceView);
 
-		currentTab = new EditorTab(workspaceView, absolutePath);
+		currentTab = new EditorTab(workspaceView, absolutePath, filename);
 		tabs.put(absolutePath, currentTab);
 
 		tabBeingCreated = false;
@@ -124,6 +125,28 @@ public class Controller {
 		if (view.getCurrentWorkspace().getPaletteLoader() != null) {
 			view.getCurrentWorkspace().getPaletteLoader().getButton().setEnabled(showButton);
 		}
+	}
+
+	public List<EditorTab> getPaletteTabList() {
+		return tabs.values()
+				.stream()
+				.filter(tab -> tab.palette != null)
+				.collect(Collectors.toList());
+	}
+
+	public ColorModel readPalette(final Wad wad) {
+		return wadUtils.findByName(wad, "PLAYPAL").map(
+				wadEntry -> paletteReader.readPalette(wadEntry.getContent(), 0)
+		).orElse(null);
+	}
+
+	public void clonePalette(final EditorTab from) {
+		currentTab.setPalette(readPalette(from.getCurrentWad()));
+		SwingUtilities.invokeLater(() -> {
+			view.getCurrentWorkspace().getPaletteToolbar().removeAll();
+			viewManager.createPalettePanel(view.getCurrentWorkspace());
+			view.getCurrentWorkspace().getPalettePanel().setPalette(currentTab.getPalette());
+		});
 	}
 
 	public void controlWadListMenu(java.awt.Component invoker, int x, int y) {

@@ -9,15 +9,17 @@ public class EditorTab {
 
     private WorkspaceView workspaceView;
     private String absolutePath;
+    private String filename;
 
     private Wad currentWad;
     ColorModel palette;
     private int currentEntry;
     private RenderedImage currentImage;
 
-    public EditorTab(WorkspaceView workspaceView, String absolutePath) {
+    public EditorTab(WorkspaceView workspaceView, String absolutePath, String filename) {
         this.workspaceView = workspaceView;
         this.absolutePath = absolutePath;
+        this.filename = filename;
     }
 
     public String getAbsolutePath() {
@@ -26,6 +28,14 @@ public class EditorTab {
 
     public void setAbsolutePath(String absolutePath) {
         this.absolutePath = absolutePath;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public WorkspaceView getWorkspaceView() {
